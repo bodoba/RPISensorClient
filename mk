@@ -1,3 +1,3 @@
 #!/bin/sh 
 
-svn ci -m "" && ssh -x david "(cd RPI/DHT11 && svn up && cmake . && make )"
+git commit -m "" ; git push && ssh -x david "(cd RPISensorClient && git pull && cmake . && make )"

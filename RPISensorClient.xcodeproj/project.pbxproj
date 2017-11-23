@@ -33,7 +33,8 @@
 			buildConfigurationList = 218060441FC761BF001E91A4 /* Build configuration list for PBXLegacyTarget "RPISensorClient" */;
 			buildPhases = (
 			);
-			buildToolPath = mk;
+			buildToolPath = ./mk;
+			buildWorkingDirectory = /Users/bb/Desktop/Build/RPISensorClient;
 			dependencies = (
 			);
 			name = RPISensorClient;
