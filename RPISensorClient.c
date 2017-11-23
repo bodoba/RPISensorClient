@@ -71,7 +71,7 @@ int main(void)
     bool success = false;
 
     if ( get_id(id) ) {
-        sprintf( topic, "%s%s/%d", MQTT_PREFIX, id, DHT11_PIN );
+        sprintf( topic, "%s%s/Sensor", MQTT_PREFIX );
         if ( mqtt_init( MQTT_BROKER, MQTT_PORT ) ) {
             if(wiringPiSetup()!=-1) {
 
