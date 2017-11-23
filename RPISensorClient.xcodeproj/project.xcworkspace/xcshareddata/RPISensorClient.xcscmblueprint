@@ -1,16 +1,16 @@
 {
-  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "bdfb77c4-14e7-11e4-969b-65384006b50d++1459",
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "332A2D50E8216F3BA8B7B9FD0A09BD3C88419412",
   "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
-    "bdfb77c4-14e7-11e4-969b-65384006b50d++1459" : {
+    "332A2D50E8216F3BA8B7B9FD0A09BD3C88419412" : {
 
     }
   },
   "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
-    "bdfb77c4-14e7-11e4-969b-65384006b50d++1459" : 9223372036854775807
+    "332A2D50E8216F3BA8B7B9FD0A09BD3C88419412" : 9223372036854775807
   },
   "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "13F53F49-CA23-4C6D-B70F-F76BE92D963E",
   "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
-    "bdfb77c4-14e7-11e4-969b-65384006b50d++1459" : "RPISensorClient\/"
+    "332A2D50E8216F3BA8B7B9FD0A09BD3C88419412" : "RPISensorClient\/"
   },
   "DVTSourceControlWorkspaceBlueprintNameKey" : "RPISensorClient",
   "DVTSourceControlWorkspaceBlueprintVersion" : 204,
@@ -19,7 +19,7 @@
     {
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "svn:\/\/goliath\/RPI",
       "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Subversion",
-      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "bdfb77c4-14e7-11e4-969b-65384006b50d++1459"
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "332A2D50E8216F3BA8B7B9FD0A09BD3C88419412"
     }
   ]
 }

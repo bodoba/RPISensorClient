@@ -2,7 +2,7 @@
 
 include(CheckIncludeFile)
 cmake_minimum_required(VERSION 3.6)
-project (ReadDHT11)
+project (RPISensorClient)
 
 set (CMAKE_C_FLAGS "-Wall -lwiringPi -lmosquitto")
 
@@ -10,6 +10,6 @@ set (CMAKE_C_FLAGS "-Wall -lwiringPi -lmosquitto")
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib)
 
-add_executable(ReadDHT11 ReadDHT11.c DHT11.c MQTT.c)
+add_executable(RPISensorClient RPISensorClient.c MQTT.c)
 
 install(TARGETS ReadDHT11 DESTINATION bin)
