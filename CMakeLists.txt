@@ -12,4 +12,4 @@ set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib)
 
 add_executable(RPISensorClient RPISensorClient.c MQTT.c)
 
-install(TARGETS ReadDHT11 DESTINATION bin)
+install(TARGETS RPISensorClient DESTINATION bin)
