@@ -11,6 +11,7 @@
 		218060481FC761FE001E91A4 /* CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		218060491FC78D1C001E91A4 /* MQTT.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = MQTT.c; sourceTree = "<group>"; };
 		2180604A1FC78D1C001E91A4 /* MQTT.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MQTT.h; sourceTree = "<group>"; };
+		2180604B1FC78FF8001E91A4 /* RPISensorClient.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = RPISensorClient.c; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -21,6 +22,7 @@
 				218060481FC761FE001E91A4 /* CMakeLists.txt */,
 				218060491FC78D1C001E91A4 /* MQTT.c */,
 				2180604A1FC78D1C001E91A4 /* MQTT.h */,
+				2180604B1FC78FF8001E91A4 /* RPISensorClient.c */,
 			);
 			sourceTree = "<group>";
 		};
