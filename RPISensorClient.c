@@ -44,7 +44,7 @@
  * defined prefix and followed by the PIN number the sensor is connected to
  * ---------------------------------------------------------------------------------------
  */
-#define MQTT_INTERFACE  "wlan0"
+#define MQTT_INTERFACE  "eth0"
 #define MQTT_PREFIX     "Sensor/BB-"
 #define MAX_TRIES        5
 
@@ -81,20 +81,22 @@ int main(void)
     char id[8], topic[32], msg[64];
     bool success = false;
 
+    int valLight, valSound, valMove;
+    
+    /* Setup sensor pins                                                                */
     if(wiringPiSetup()!=-1) {
         pinMode(SENSOR_LGT_PIN, INPUT);
         pinMode(SENSOR_SND_PIN, INPUT);
         pinMode(SENSOR_PIR_PIN, INPUT);
         
-        int valLight = digitalRead(SENSOR_LGT_PIN);
-        int valSound = digitalRead(SENSOR_SND_PIN);
-        int valMove  = digitalRead(SENSOR_PIR_PIN);
+        /* Read sensor values                                                           */
+        valLight = digitalRead(SENSOR_LGT_PIN);
+        valSound = digitalRead(SENSOR_SND_PIN);
+        valMove  = digitalRead(SENSOR_PIR_PIN);
         
-        printf ("%c %c %c\n",  valLight ? 'X':'.', valSound ? 'X':'.', valMove ? 'X':'.');
-        
+        printf ("Light\t:%c\nSound\t:%c\nMove\t:%c\n",  valLight ? '_':'Y', valSound ? '_':'Y', valMove ? 'Y':'_');
     }
 
-    
     return true;
     
     if ( get_id(id) ) {
