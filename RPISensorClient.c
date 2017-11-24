@@ -44,9 +44,7 @@
  * defined prefix and followed by the PIN number the sensor is connected to
  * ---------------------------------------------------------------------------------------
  */
-#define MQTT_INTERFACE  "wlan0"
-#define MQTT_PREFIX     "Sensor/BB-"
-#define MAX_TRIES        5
+#define MQTT_INTERFACE  "eth0"
 
 /*
  * ---------------------------------------------------------------------------------------
@@ -91,13 +89,23 @@ int main(void)
         pinMode(SENSOR_SND_PIN, INPUT);
         pinMode(SENSOR_PIR_PIN, INPUT);
         
+        if ( get_id(id) ) {
+        
+
         /* Read sensor values                                                           */
         valLight = digitalRead(SENSOR_LGT_PIN);
+        sprintf( topic, "BB-%s/Sensor/%d", MQTT_PREFIX, id, );
+
+            
+            
         valSound = digitalRead(SENSOR_SND_PIN);
         valMove  = digitalRead(SENSOR_PIR_PIN);
         
         printf ("Light   : %c\nSound   : %c\nMovement: %c\n",  valLight ? '_':'Y', valSound ? '_':'Y', valMove ? 'Y':'_');
+
+        }
     }
+    
     
     if ( get_id(id) ) {
         sprintf( topic, "%s%s/Sensor", MQTT_PREFIX, id );
