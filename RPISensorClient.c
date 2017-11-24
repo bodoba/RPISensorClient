@@ -94,10 +94,8 @@ int main(void)
         valSound = digitalRead(SENSOR_SND_PIN);
         valMove  = digitalRead(SENSOR_PIR_PIN);
         
-        printf ("Light\t:%c\nSound\t:%c\nMove\t:%c\n",  valLight ? '_':'Y', valSound ? '_':'Y', valMove ? 'Y':'_');
+        printf ("Light\t: %c\nSound\t: %c\nMovement\t: %c\n",  valLight ? '_':'Y', valSound ? '_':'Y', valMove ? 'Y':'_');
     }
-
-    return true;
     
     if ( get_id(id) ) {
         sprintf( topic, "%s%s/Sensor", MQTT_PREFIX, id );
