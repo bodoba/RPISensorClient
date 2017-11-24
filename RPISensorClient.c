@@ -82,7 +82,9 @@ int main(void)
 
     if ( get_id(id) ) {
         sprintf( topic, "%s%s/Sensor", MQTT_PREFIX, id );
+        printf ("D1\n"),
         if ( mqtt_init(MQTT_BROKER, MQTT_PORT)) {
+            printf ("D2\n‚"),
             if(wiringPiSetup()!=-1) {
                 pinMode(SENSOR_LGT_PIN, INPUT);
                 pinMode(SENSOR_SND_PIN, INPUT);
