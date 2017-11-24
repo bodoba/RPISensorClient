@@ -88,7 +88,7 @@ bool get_id ( char* id ) {
  */
 void readSensor(char* id, int pin, char* name) {
     char topic[32], msg[64];
-    value = digitalRead(pin);
+    int value = digitalRead(pin);
     sprintf(topic, "%s/BB-%s/%d", name, id, pin);
     sprintf(msg, "{\"%s\":\"%d\"}", name, value);
     printf ( "%s %s\n", topic, msg);
@@ -100,8 +100,7 @@ void readSensor(char* id, int pin, char* name) {
 int main(void)
 {
     char id[8];
-    int valLight, valSound, valMove;
-    
+
     if(wiringPiSetup()!=-1) {
         pinMode(SENSOR_LGT_PIN, INPUT);
         pinMode(SENSOR_SND_PIN, INPUT);
