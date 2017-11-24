@@ -49,6 +49,15 @@
 
 /*
  * ---------------------------------------------------------------------------------------
+ * Where are the sensors connected to?
+ * ---------------------------------------------------------------------------------------
+ */
+#define SENSOR_LGT_PIN  2
+#define SENSOR_SND_PIN  3
+#define SENSOR_PIR_PIN 12
+
+/*
+ * ---------------------------------------------------------------------------------------
  * get the last two bytes of the MAC address of the MQTT_INTERFACE
  * ---------------------------------------------------------------------------------------
  */
@@ -74,7 +83,16 @@ int main(void)
         sprintf( topic, "%s%s/Sensor", MQTT_PREFIX );
         if ( mqtt_init( MQTT_BROKER, MQTT_PORT ) ) {
             if(wiringPiSetup()!=-1) {
-
+                pinMode ( SENSOR_LGT_PIN, INPUT) ;
+                pinMode ( SENSOR_SND_PIN, INPUT) ;
+                pinMode ( SENSOR_PIR_PIN, INPUT) ;
+                
+                int valLight = digitalRead(SENSOR_LGT_PIN);
+                int valSound = digitalRead(SENSOR_SND_PIN);
+                int valMove  = digitalRead(SENSOR_PIR_PIN);
+                
+                printf ( "%c %c %c\n",  valLight ? 'X':'.', valSound ? 'X':'.', valMove ? 'X':'.',  )
+                            
             }
         }
     }
