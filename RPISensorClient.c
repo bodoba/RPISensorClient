@@ -95,7 +95,7 @@ int main(void)
     }
 
     
-    
+    return true;
     
     if ( get_id(id) ) {
         sprintf( topic, "%s%s/Sensor", MQTT_PREFIX, id );
