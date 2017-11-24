@@ -27,6 +27,7 @@
 #include <stdio.h>
 #include <string.h>
 
+#include <wiringPi.h>
 #include "MQTT.h"
 
 /* 
@@ -92,7 +93,7 @@ int main(void)
                 int valMove  = digitalRead(SENSOR_PIR_PIN);
                 
                 printf ( "%c %c %c\n",  valLight ? 'X':'.', valSound ? 'X':'.', valMove ? 'X':'.',  )
-                            
+                
             }
         }
     }
