@@ -55,6 +55,10 @@
 #define SENSOR_SND_PIN  3
 #define SENSOR_PIR_PIN 12
 
+
+void readSensor(char* id, int pin, char* name);
+bool get_id ( char* id );
+
 /*
  * ---------------------------------------------------------------------------------------
  * get the last two bytes of the MAC address of the MQTT_INTERFACE
@@ -76,54 +80,43 @@ bool get_id ( char* id ) {
     return success;
 }
 
+
+/*
+ * ---------------------------------------------------------------------------------------
+ * Read sensor and publish value to MQTT broker
+ * ---------------------------------------------------------------------------------------
+ */
+void readSensor(char* id, int pin, char* name) {
+    char topic[32], msg[64];
+    value = digitalRead(pin);
+    sprintf(topic, "%s/BB-%s/%d", name, id, pin);
+    sprintf(msg, "{\"%s\":\"%d\"}", name, value);
+    printf ( "%s %s\n", topic, msg);
+    if ( ! mqtt_publish( topic, msg ) ) {
+        fprintf(stderr, "Error: Did not publish message: %s\n", msg);
+    }
+}
+
 int main(void)
 {
-    char id[8], topic[32], msg[64];
-    bool success = false;
-
+    char id[8];
     int valLight, valSound, valMove;
     
-    /* Setup sensor pins                                                                */
     if(wiringPiSetup()!=-1) {
         pinMode(SENSOR_LGT_PIN, INPUT);
         pinMode(SENSOR_SND_PIN, INPUT);
         pinMode(SENSOR_PIR_PIN, INPUT);
-        
+
         if ( get_id(id) ) {
-        
-
-        /* Read sensor values                                                           */
-        valLight = digitalRead(SENSOR_LGT_PIN);
-        sprintf( topic, "BB-%s/Sensor/%d", MQTT_PREFIX, id, );
-
-            
-            
-        valSound = digitalRead(SENSOR_SND_PIN);
-        valMove  = digitalRead(SENSOR_PIR_PIN);
-        
-        printf ("Light   : %c\nSound   : %c\nMovement: %c\n",  valLight ? '_':'Y', valSound ? '_':'Y', valMove ? 'Y':'_');
-
+            if ( mqtt_init(MQTT_BROKER, MQTT_PORT)) {
+                readSensor(id, SENSOR_LGT_PIN, "LM393");
+                readSensor(id, SENSOR_SND_PIN, "MHSND");
+                readSensor(id, SENSOR_PIR_PIN, "ME003");
+            } else {
+                fprintf(stderr, "Error: Could not connect to MQTT broker: %s:%d\n", MQTT_BROKER, MQTT_PORT);
+            }
         }
     }
-    
-    
-    if ( get_id(id) ) {
-        sprintf( topic, "%s%s/Sensor", MQTT_PREFIX, id );
-        printf ("D1\n");
-        if ( mqtt_init(MQTT_BROKER, MQTT_PORT)) {
-            printf ("D2\n‚");
-        }
-    }
-    
-    if ( success ) {
-        if ( ! mqtt_publish( topic, msg ) ) {
-            fprintf(stderr, "Error: Did not publish message: %s\n", msg);
-        }
-    } else {
-        fprintf(stderr, "Error: Something went wrong\n");
-    }
-
     mqtt_end();
-
-    return success ? 0 : 1;
-}  
+    return 0;
+}
