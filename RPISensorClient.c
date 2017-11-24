@@ -70,6 +70,7 @@ bool get_id ( char* id ) {
     strcpy(s.ifr_name, MQTT_INTERFACE );
     if (0 == ioctl(fd, SIOCGIFHWADDR, &s)) {
         sprintf(id, "%02x%02x",s.ifr_addr.sa_data[4], s.ifr_addr.sa_data[5]);
+        printf ("D0\n");
         success = true;
     }
     return success;
