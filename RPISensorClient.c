@@ -81,18 +81,18 @@ int main(void)
     bool success = false;
 
     if ( get_id(id) ) {
-        sprintf( topic, "%s%s/Sensor", MQTT_PREFIX );
-        if ( mqtt_init( MQTT_BROKER, MQTT_PORT ) ) {
+        sprintf( topic, "%s%s/Sensor", MQTT_PREFIX, id );
+        if ( mqtt_init(MQTT_BROKER, MQTT_PORT)) {
             if(wiringPiSetup()!=-1) {
-                pinMode ( SENSOR_LGT_PIN, INPUT) ;
-                pinMode ( SENSOR_SND_PIN, INPUT) ;
-                pinMode ( SENSOR_PIR_PIN, INPUT) ;
+                pinMode(SENSOR_LGT_PIN, INPUT);
+                pinMode(SENSOR_SND_PIN, INPUT);
+                pinMode(SENSOR_PIR_PIN, INPUT);
                 
                 int valLight = digitalRead(SENSOR_LGT_PIN);
                 int valSound = digitalRead(SENSOR_SND_PIN);
                 int valMove  = digitalRead(SENSOR_PIR_PIN);
                 
-                printf ( "%c %c %c\n",  valLight ? 'X':'.', valSound ? 'X':'.', valMove ? 'X':'.',  )
+                printf ("%c %c %c\n",  valLight ? 'X':'.', valSound ? 'X':'.', valMove ? 'X':'.',  )
                 
             }
         }
