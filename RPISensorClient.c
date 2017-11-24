@@ -92,7 +92,7 @@ int main(void)
                 int valSound = digitalRead(SENSOR_SND_PIN);
                 int valMove  = digitalRead(SENSOR_PIR_PIN);
                 
-                printf ("%c %c %c\n",  valLight ? 'X':'.', valSound ? 'X':'.', valMove ? 'X':'.',  )
+                printf ("%c %c %c\n",  valLight ? 'X':'.', valSound ? 'X':'.', valMove ? 'X':'.');
                 
             }
         }
