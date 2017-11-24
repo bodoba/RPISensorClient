@@ -44,7 +44,7 @@
  * defined prefix and followed by the PIN number the sensor is connected to
  * ---------------------------------------------------------------------------------------
  */
-#define MQTT_INTERFACE  "eth0"
+#define MQTT_INTERFACE  "wlan0"
 #define MQTT_PREFIX     "Sensor/BB-"
 #define MAX_TRIES        5
 
@@ -70,8 +70,10 @@ bool get_id ( char* id ) {
     strcpy(s.ifr_name, MQTT_INTERFACE );
     if (0 == ioctl(fd, SIOCGIFHWADDR, &s)) {
         sprintf(id, "%02x%02x",s.ifr_addr.sa_data[4], s.ifr_addr.sa_data[5]);
-        printf ("D0\n");
         success = true;
+    } else {
+        fprintf(stderr, "Error: Could not read MAC address if interface %s\n", MQTT_INTERFACE );
+        success = false;
     }
     return success;
 }
@@ -94,7 +96,7 @@ int main(void)
         valSound = digitalRead(SENSOR_SND_PIN);
         valMove  = digitalRead(SENSOR_PIR_PIN);
         
-        printf ("Light\t: %c\nSound\t: %c\nMovement\t: %c\n",  valLight ? '_':'Y', valSound ? '_':'Y', valMove ? 'Y':'_');
+        printf ("Light   : %c\nSound   : %c\nMovement: %c\n",  valLight ? '_':'Y', valSound ? '_':'Y', valMove ? 'Y':'_');
     }
     
     if ( get_id(id) ) {
