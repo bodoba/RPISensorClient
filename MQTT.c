@@ -66,6 +66,7 @@ bool mqtt_publish ( const char *topic, const char *message ) {
             fprintf(stderr, "Error: mosquitto_publish failed [%s]\n", mosquitto_strerror(err));
             success = false;
         }
+        mosquitto_loop(mosq, 0, 1);
     } else {
         fprintf(stderr, "Error: mosq == NULL, Init failed?\n");
         success = false;
