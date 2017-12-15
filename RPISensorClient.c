@@ -116,9 +116,9 @@ int main(void)
 
         if ( get_id(id) ) {
             if ( mqtt_init(MQTT_BROKER, MQTT_PORT)) {
-                readSensor(id, SENSOR_LGT_PIN, "LM393");
-                readSensor(id, SENSOR_SND_PIN, "MHSND");
-                readSensor(id, SENSOR_PIR_PIN, "ME003");
+                readSensor(id, SENSOR_LGT_PIN, "Light");
+                readSensor(id, SENSOR_SND_PIN, "Sound");
+                readSensor(id, SENSOR_PIR_PIN, "Movement");
             } else {
                 fprintf(stderr, "Error: Could not connect to MQTT broker: %s:%d\n",
                         MQTT_BROKER,
