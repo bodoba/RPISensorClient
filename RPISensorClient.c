@@ -74,7 +74,8 @@ bool get_id ( char* id ) {
         sprintf(id, "%02x%02x",s.ifr_addr.sa_data[4], s.ifr_addr.sa_data[5]);
         success = true;
     } else {
-        fprintf(stderr, "Error: Could not read MAC address if interface %s\n", MQTT_INTERFACE );
+        fprintf(stderr, "Error: Could not read MAC address if interface %s\n",
+                MQTT_INTERFACE );
         success = false;
     }
     return success;
@@ -98,6 +99,12 @@ void readSensor(char* id, int pin, char* name) {
     }
 }
 
+
+/*
+ * ---------------------------------------------------------------------------------------
+ * M A I N
+ * ---------------------------------------------------------------------------------------
+ */
 int main(void)
 {
     char id[8];
@@ -113,7 +120,9 @@ int main(void)
                 readSensor(id, SENSOR_SND_PIN, "MHSND");
                 readSensor(id, SENSOR_PIR_PIN, "ME003");
             } else {
-                fprintf(stderr, "Error: Could not connect to MQTT broker: %s:%d\n", MQTT_BROKER, MQTT_PORT);
+                fprintf(stderr, "Error: Could not connect to MQTT broker: %s:%d\n",
+                        MQTT_BROKER,
+                        MQTT_PORT);
             }
         }
     }
