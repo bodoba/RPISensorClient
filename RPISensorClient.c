@@ -87,7 +87,7 @@ bool get_id ( char* id ) {
  */
 void readSensor(char* id, int pin, char* name, uint8_t* value) {
     char topic[32], msg[64];
-    int value = digitalRead(pin);
+    value = digitalRead(pin);
     sprintf(topic, "%s/BB-%s/%d", name, id, pin);
     sprintf(msg, "{\"%s\":\"%d\"}", name, value);
     printf ( "%s %s\n", topic, msg);
