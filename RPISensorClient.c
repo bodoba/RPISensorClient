@@ -55,8 +55,7 @@
 #define SENSOR_SND_PIN  3
 #define SENSOR_PIR_PIN 12
 
-
-void readSensor(char* id, int pin, char* name);
+void readSensor(char* id, int pin, char* name, uint8* value);
 bool get_id ( char* id );
 
 /*
@@ -81,13 +80,12 @@ bool get_id ( char* id ) {
     return success;
 }
 
-
 /*
  * ---------------------------------------------------------------------------------------
  * Read sensor and publish value to MQTT broker
  * ---------------------------------------------------------------------------------------
  */
-void readSensor(char* id, int pin, char* name) {
+void readSensor(char* id, int pin, char* name, uint8* value) {
     char topic[32], msg[64];
     int value = digitalRead(pin);
     sprintf(topic, "%s/BB-%s/%d", name, id, pin);
@@ -99,7 +97,6 @@ void readSensor(char* id, int pin, char* name) {
     }
 }
 
-
 /*
  * ---------------------------------------------------------------------------------------
  * M A I N
@@ -108,6 +105,10 @@ void readSensor(char* id, int pin, char* name) {
 int main(void)
 {
     char id[8];
+    
+    uint8_t lgt_value;
+    uint8_t snd_value;
+    uint8_t pir_value;
 
     if(wiringPiSetup()!=-1) {
         pinMode(SENSOR_LGT_PIN, INPUT);
@@ -116,9 +117,9 @@ int main(void)
 
         if ( get_id(id) ) {
             if ( mqtt_init(MQTT_BROKER, MQTT_PORT)) {
-                readSensor(id, SENSOR_LGT_PIN, "Light");
-                readSensor(id, SENSOR_SND_PIN, "Sound");
-                readSensor(id, SENSOR_PIR_PIN, "Movement");
+                readSensor(id, SENSOR_LGT_PIN, "Light",    &lgt_value);
+                readSensor(id, SENSOR_SND_PIN, "Sound",    &snd_value);
+                readSensor(id, SENSOR_PIR_PIN, "Movement", &pit_value);
             } else {
                 fprintf(stderr, "Error: Could not connect to MQTT broker: %s:%d\n",
                         MQTT_BROKER,
