@@ -61,7 +61,7 @@
  * ---------------------------------------------------------------------------------------
  */
 #define CYCLE_TIME      1 // seconds between two readings
-#define REPORT_SYCLE   30 // how many cycles between two full reports
+#define REPORT_CYCLE   30 // how many cycles between two full reports
 
 
 void readSensor(char* id, int pin, char* name, uint8_t* value);
