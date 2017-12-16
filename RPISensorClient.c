@@ -55,6 +55,15 @@
 #define SENSOR_SND_PIN  3
 #define SENSOR_PIR_PIN 12
 
+/*
+ * ---------------------------------------------------------------------------------------
+ * Intervals
+ * ---------------------------------------------------------------------------------------
+ */
+#define CYCLE_TIME      1 // seconds between two readings
+#define REPORT_SYCLE   30 // how many cycles between two full reports
+
+
 void readSensor(char* id, int pin, char* name, uint8_t* value);
 bool get_id ( char* id );
 
@@ -118,17 +127,23 @@ int main(void)
         pinMode(SENSOR_LGT_PIN, INPUT);
         pinMode(SENSOR_SND_PIN, INPUT);
         pinMode(SENSOR_PIR_PIN, INPUT);
-
-        if ( get_id(id) ) {
-            if ( mqtt_init(MQTT_BROKER, MQTT_PORT)) {
-                readSensor(id, SENSOR_LGT_PIN, "Light",    &lgt_value);
-                readSensor(id, SENSOR_SND_PIN, "Sound",    &snd_value);
-                readSensor(id, SENSOR_PIR_PIN, "Movement", &pir_value);
-            } else {
-                fprintf(stderr, "Error: Could not connect to MQTT broker: %s:%d\n",
-                        MQTT_BROKER,
-                        MQTT_PORT);
+        
+        
+        // main cycle
+        for ( ;; ) {
+            
+            if ( get_id(id) ) {
+                if ( mqtt_init(MQTT_BROKER, MQTT_PORT)) {
+                    readSensor(id, SENSOR_LGT_PIN, "Light",    &lgt_value);
+                    readSensor(id, SENSOR_SND_PIN, "Sound",    &snd_value);
+                    readSensor(id, SENSOR_PIR_PIN, "Movement", &pir_value);
+                } else {
+                    fprintf(stderr, "Error: Could not connect to MQTT broker: %s:%d\n",
+                            MQTT_BROKER,
+                            MQTT_PORT);
+                }
             }
+            sleep(CYCLE_TIME);
         }
     }
     mqtt_end();
