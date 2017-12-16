@@ -87,9 +87,9 @@ bool get_id ( char* id ) {
  */
 void readSensor(char* id, int pin, char* name, uint8_t* value) {
     char topic[32], msg[64];
-    value = digitalRead(pin);
+    uint8_t new_value = digitalRead(pin);
     sprintf(topic, "%s/BB-%s/%d", name, id, pin);
-    sprintf(msg, "{\"%s\":\"%d\"}", name, value);
+    sprintf(msg, "{\"%s\":\"%d\"}", name, new_value);
     printf ( "%s %s\n", topic, msg);
     
     if ( ! mqtt_publish( topic, msg ) ) {
@@ -119,7 +119,7 @@ int main(void)
             if ( mqtt_init(MQTT_BROKER, MQTT_PORT)) {
                 readSensor(id, SENSOR_LGT_PIN, "Light",    &lgt_value);
                 readSensor(id, SENSOR_SND_PIN, "Sound",    &snd_value);
-                readSensor(id, SENSOR_PIR_PIN, "Movement", &pit_value);
+                readSensor(id, SENSOR_PIR_PIN, "Movement", &pir_value);
             } else {
                 fprintf(stderr, "Error: Could not connect to MQTT broker: %s:%d\n",
                         MQTT_BROKER,
