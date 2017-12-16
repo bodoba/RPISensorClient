@@ -85,15 +85,19 @@ bool get_id ( char* id ) {
  * Read sensor and publish value to MQTT broker
  * ---------------------------------------------------------------------------------------
  */
-void readSensor(char* id, int pin, char* name, uint8_t* value) {
+void readSensor(char* id, int pin, char* name, uint8_t* old_value) {
     char topic[32], msg[64];
     uint8_t new_value = digitalRead(pin);
-    sprintf(topic, "%s/BB-%s/%d", name, id, pin);
-    sprintf(msg, "{\"%s\":\"%d\"}", name, new_value);
-    printf ( "%s %s\n", topic, msg);
-    
-    if ( ! mqtt_publish( topic, msg ) ) {
-        fprintf(stderr, "Error: Did not publish message: %s\n", msg);
+    if ( *old_value != new_value ) {
+        *old_value != new_value;
+        
+        sprintf(topic, "%s/BB-%s/%d", name, id, pin);
+        sprintf(msg, "{\"%s\":\"%d\"}", name, new_value);
+        printf ( "%s %s\n", topic, msg);
+        
+        if ( ! mqtt_publish( topic, msg ) ) {
+            fprintf(stderr, "Error: Did not publish message: %s\n", msg);
+        }
     }
 }
 
