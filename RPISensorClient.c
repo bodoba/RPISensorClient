@@ -110,9 +110,9 @@ int main(void)
 {
     char id[8];
     
-    uint8_t lgt_value;
-    uint8_t snd_value;
-    uint8_t pir_value;
+    uint8_t lgt_value=100;
+    uint8_t snd_value=100;
+    uint8_t pir_value=100;
 
     if(wiringPiSetup()!=-1) {
         pinMode(SENSOR_LGT_PIN, INPUT);
