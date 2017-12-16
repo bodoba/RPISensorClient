@@ -55,7 +55,7 @@
 #define SENSOR_SND_PIN  3
 #define SENSOR_PIR_PIN 12
 
-void readSensor(char* id, int pin, char* name, uint8* value);
+void readSensor(char* id, int pin, char* name, uint8_t* value);
 bool get_id ( char* id );
 
 /*
@@ -85,7 +85,7 @@ bool get_id ( char* id ) {
  * Read sensor and publish value to MQTT broker
  * ---------------------------------------------------------------------------------------
  */
-void readSensor(char* id, int pin, char* name, uint8* value) {
+void readSensor(char* id, int pin, char* name, uint8_t* value) {
     char topic[32], msg[64];
     int value = digitalRead(pin);
     sprintf(topic, "%s/BB-%s/%d", name, id, pin);
