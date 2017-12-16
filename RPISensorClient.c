@@ -89,7 +89,7 @@ void readSensor(char* id, int pin, char* name, uint8_t* old_value) {
     char topic[32], msg[64];
     uint8_t new_value = digitalRead(pin);
     if ( *old_value != new_value ) {
-        *old_value != new_value;
+        *old_value = new_value;
         
         sprintf(topic, "%s/BB-%s/%d", name, id, pin);
         sprintf(msg, "{\"%s\":\"%d\"}", name, new_value);
