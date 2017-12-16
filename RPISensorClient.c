@@ -26,6 +26,7 @@
 #include <netdb.h>
 #include <stdio.h>
 #include <string.h>
+#include <unistd.h>
 
 #include <wiringPi.h>
 #include "MQTT.h"
@@ -121,39 +122,38 @@ int main(void)
     uint8_t lgt_value=100;
     uint8_t snd_value=100;
     uint8_t pir_value=100;
-
+    
     uint8_t countdown = REPORT_CYCLE;
     
     if(wiringPiSetup()!=-1) {
         pinMode(SENSOR_LGT_PIN, INPUT);
         pinMode(SENSOR_SND_PIN, INPUT);
         pinMode(SENSOR_PIR_PIN, INPUT);
-        
-        // main cycle
-        for ( ;; ) {
-            
-            if ( get_id(id) ) {
-                if ( mqtt_init(MQTT_BROKER, MQTT_PORT)) {
+        if ( get_id(id) ) {
+            if ( mqtt_init(MQTT_BROKER, MQTT_PORT)) {
+                // main cycle
+                for ( ;; ) {
                     readSensor(id, SENSOR_LGT_PIN, "LGT",    &lgt_value);
                     readSensor(id, SENSOR_SND_PIN, "SNS",    &snd_value);
                     readSensor(id, SENSOR_PIR_PIN, "PIR", &pir_value);
-                } else {
-                    fprintf(stderr, "Error: Could not connect to MQTT broker: %s:%d\n",
-                            MQTT_BROKER,
-                            MQTT_PORT);
+                    
+                    if ( countdown > 0 ) {
+                        countdown--;
+                    } else {
+                        countdown = REPORT_CYCLE;
+                        lgt_value=100;
+                        snd_value=100;
+                        pir_value=100;
+                    }
+                    sleep(CYCLE_TIME);
                 }
-            }
-            if ( countdown > 0 ) {
-                countdown--;
+                mqtt_end();
             } else {
-                countdown = REPORT_CYCLE;
-                lgt_value=100;
-                snd_value=100;
-                pir_value=100;
+                fprintf(stderr, "Error: Could not connect to MQTT broker: %s:%d\n",
+                        MQTT_BROKER,
+                        MQTT_PORT);
             }
-            sleep(CYCLE_TIME);
+            
         }
+        return 0;
     }
-    mqtt_end();
-    return 0;
-}
