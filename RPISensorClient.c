@@ -2,7 +2,6 @@
  * ---------------------------------------------------------------------------------------
  * Copyright 2017 by Bodo Bauer <bb@bb-zone.com>
  *
- *
  * This file is part of the RPI Sensor Client 'RPISensorClient'
  *
  * ReadDHT11 is free software: you can redistribute it and/or modify
@@ -63,7 +62,6 @@
  */
 #define CYCLE_TIME      1 // seconds between two readings
 #define REPORT_CYCLE  300 // how many cycles between two full reports
-
 
 void readSensor(char* id, int pin, char* name, uint8_t* value);
 bool get_id ( char* id );
@@ -133,8 +131,8 @@ int main(void)
             if ( mqtt_init(MQTT_BROKER, MQTT_PORT)) {
                 // main cycle
                 for ( ;; ) {
-                    readSensor(id, SENSOR_LGT_PIN, "LGT",    &lgt_value);
-                    readSensor(id, SENSOR_SND_PIN, "SNS",    &snd_value);
+                    readSensor(id, SENSOR_LGT_PIN, "LGT", &lgt_value);
+                    readSensor(id, SENSOR_SND_PIN, "SND", &snd_value);
                     readSensor(id, SENSOR_PIR_PIN, "PIR", &pir_value);
                     
                     if ( countdown > 0 ) {
