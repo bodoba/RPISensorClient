@@ -118,16 +118,16 @@ void readSensor(char* id, int pin, char* name, uint8_t* old_value) {
 int main(void)
 {
     char id[8];
-    
     uint8_t lgt_value=100;
     uint8_t snd_value=100;
     uint8_t pir_value=100;
 
+    uint8_t countdown = REPORT_CYCLE;
+    
     if(wiringPiSetup()!=-1) {
         pinMode(SENSOR_LGT_PIN, INPUT);
         pinMode(SENSOR_SND_PIN, INPUT);
         pinMode(SENSOR_PIR_PIN, INPUT);
-        
         
         // main cycle
         for ( ;; ) {
@@ -142,6 +142,14 @@ int main(void)
                             MQTT_BROKER,
                             MQTT_PORT);
                 }
+            }
+            if ( countdown > 0 ) {
+                countdown--;
+            } else {
+                countdown = REPORT_CYCLE;
+                lgt_value=100;
+                snd_value=100;
+                pir_value=100;
             }
             sleep(CYCLE_TIME);
         }
