@@ -4,7 +4,7 @@ include(CheckIncludeFile)
 cmake_minimum_required(VERSION 3.6)
 project (RPISensorClient)
 
-set (CMAKE_C_FLAGS "-Wall -lwiringPi -lmosquitto")
+set (CMAKE_C_FLAGS "-Wall -std=gnu11 -lwiringPi -lmosquitto")
 
 # all executables end up in bin
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)

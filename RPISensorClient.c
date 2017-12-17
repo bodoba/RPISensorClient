@@ -144,9 +144,6 @@ int main(void)
         if (!strcmp(argv[i], "-d")) {       /* '-d' turns debug mode on                */
             debug = true;
         }
-        if (!strcmp(argv[i], "-c")) {       /* '-c' specify configuration file         */
-            configFile = strdup(argv[++i]);
-        }
     }
     
     if(wiringPiSetup()!=-1) {
