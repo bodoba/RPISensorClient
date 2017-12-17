@@ -139,9 +139,10 @@ int main(void)
                         countdown--;
                     } else {
                         countdown = REPORT_CYCLE;
-                        lgt_value=100;
-                        snd_value=100;
-                        pir_value=100;
+                        // change value to enforce report of actual value
+                        lgt_value++;
+                        snd_value++;
+                        pir_value++;
                     }
                     sleep(CYCLE_TIME);
                 }
