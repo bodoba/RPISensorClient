@@ -24,6 +24,7 @@
 #include <linux/if.h>
 #include <netdb.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
 #include <syslog.h>
