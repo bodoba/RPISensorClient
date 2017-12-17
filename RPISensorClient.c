@@ -21,6 +21,9 @@
 
 #include <sys/socket.h>
 #include <sys/ioctl.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <sys/wait.h>
 #include <linux/if.h>
 #include <netdb.h>
 #include <stdio.h>
@@ -28,6 +31,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <syslog.h>
+#include <signal.h>
 
 #include <wiringPi.h>
 #include "MQTT.h"
