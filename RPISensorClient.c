@@ -111,10 +111,10 @@ void readSensor(char* id, int pin, char* name, uint8_t* old_value) {
         sprintf(topic, "%s/BB-%s/%d", name, id, pin);
         sprintf(msg, "{\"%s\":\"%d\"}", name, new_value);
         if ( debug ) {
-            printf ( "%s %s\n", topic, msg);
+            syslog(LOG_INFO, "%s %s\n", topic, msg);
         }
         if ( ! mqtt_publish( topic, msg ) ) {
-            fprintf(stderr, "Error: Did not publish message: %s\n", msg);
+            syslog(LOG_ERR, "Error: Did not publish message: %s\n", msg);
         }
     }
 }
