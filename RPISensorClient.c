@@ -72,15 +72,60 @@
 #define CYCLE_TIME      1 // seconds between two readings
 #define REPORT_CYCLE  900 // how many cycles between two full reports
 
-/*
+
+/* 
  * ---------------------------------------------------------------------------------------
  * Some globals we can't do without... ;)
  * ---------------------------------------------------------------------------------------
  */
 bool debug = false;
 
+/*
+ * ---------------------------------------------------------------------------------------
+ * Function prototypes
+ * ---------------------------------------------------------------------------------------
+ */
 void readSensor(char* id, int pin, char* name, uint8_t* value);
 bool get_id ( char* id );
+void sigendCB(int sigval);
+void shutdown(void);
+
+/*
+ * ---------------------------------------------------------------------------------------
+ * there are many ways to die
+ * ---------------------------------------------------------------------------------------
+ */
+void sigendCB(int sigval)
+{
+    switch(sigval)
+    {
+        case SIGHUP:
+            syslog(LOG_WARNING, "Received SIGHUP signal.");
+            break;
+        case SIGINT:
+        case SIGTERM:
+            syslog(LOG_INFO, "Daemon exiting");
+            shutdown();
+            exit(EXIT_SUCCESS);
+            break;
+        default:
+            syslog(LOG_WARNING, "Unhandled signal %s", strsignal(sigval));
+            break;
+    }
+}
+
+/*
+ * ---------------------------------------------------------------------------------------
+ * shutdwown deamon
+ * ---------------------------------------------------------------------------------------
+ */
+void shutdown(void) {
+    closelog();
+    if (!debug) {
+        close(pidFilehandle);
+        unlink(pidfile);
+    }
+}
 
 /*
  * ---------------------------------------------------------------------------------------
@@ -231,7 +276,14 @@ int main(int argc, char *argv[]) {
                MQTT_BROKER_IP, MQTT_BROKER_PORT);
         exit(EXIT_FAILURE);
     }
-    
+
+    /* ------------------------------------------------------------------------------- */
+    /* Signals to handle                                                               */
+    /* ------------------------------------------------------------------------------- */
+    signal(SIGHUP,  sigendCB);      /* catch hangup signal                             */
+    signal(SIGTERM, sigendCB);      /* catch term signal                               */
+    signal(SIGINT,  sigendCB);      /* catch interrupt signal                          */
+
     /* ------------------------------------------------------------------------------- */
     /* now we can do our business                                                      */
     /* ------------------------------------------------------------------------------- */
