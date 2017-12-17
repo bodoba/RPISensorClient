@@ -78,7 +78,7 @@
  * ---------------------------------------------------------------------------------------
  */
 bool debug  = false;
-bool daemon = true;
+bool deaemon = true;
 int  pidFilehandle = 0;
 char *pidfile = PID_FILE;
 
