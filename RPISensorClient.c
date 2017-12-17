@@ -72,7 +72,6 @@
 #define CYCLE_TIME      1 // seconds between two readings
 #define REPORT_CYCLE  900 // how many cycles between two full reports
 
-
 /* 
  * ---------------------------------------------------------------------------------------
  * Some globals we can't do without... ;)
@@ -90,7 +89,7 @@ char        *pidfile = PID_FILE;
 void readSensor(char* id, int pin, char* name, uint8_t* value);
 bool get_id ( char* id );
 void sigendCB(int sigval);
-void shutdown(void);
+void shutdown_daemon(void);
 
 /*
  * ---------------------------------------------------------------------------------------
@@ -107,7 +106,7 @@ void sigendCB(int sigval)
         case SIGINT:
         case SIGTERM:
             syslog(LOG_INFO, "Daemon exiting");
-            shutdown();
+            shutdown_daemon();
             exit(EXIT_SUCCESS);
             break;
         default:
@@ -121,7 +120,7 @@ void sigendCB(int sigval)
  * shutdwown deamon
  * ---------------------------------------------------------------------------------------
  */
-void shutdown(void) {
+void shutdown_daemon(void) {
     closelog();
     mqtt_end();
     if (!debug) {
@@ -314,7 +313,7 @@ int main(int argc, char *argv[]) {
     /* ------------------------------------------------------------------------------- */
     /* finish up                                                                       */
     /* ------------------------------------------------------------------------------- */
-    shutdown();
+    shutdown_daemon();
     exit(EXIT_SUCCESS);
 
     return 0;
