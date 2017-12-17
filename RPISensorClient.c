@@ -121,7 +121,7 @@ int main(void)
     uint8_t snd_value=100;
     uint8_t pir_value=100;
     
-    uint8_t countdown = REPORT_CYCLE;
+    uint32_t countdown = REPORT_CYCLE;
     
     if(wiringPiSetup()!=-1) {
         pinMode(SENSOR_LGT_PIN, INPUT);
