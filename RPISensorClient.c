@@ -26,6 +26,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
+#include <syslog.h>
 
 #include <wiringPi.h>
 #include "MQTT.h"
@@ -123,7 +124,7 @@ void readSensor(char* id, int pin, char* name, uint8_t* old_value) {
  * M A I N
  * ---------------------------------------------------------------------------------------
  */
-int main(void)
+int main(int argc, char *argv[]) {
 {
     char id[8];
     uint8_t lgt_value=100;
@@ -131,6 +132,8 @@ int main(void)
     uint8_t pir_value=100;
 
     uint32_t countdown = REPORT_CYCLE;
+
+    openlog(NULL, LOG_PID, LOG_USER);       /* use syslog to create a trace            */
     
     /* ------------------------------------------------------------------------------- */
     /* Process command line options                                                    */
@@ -145,6 +148,12 @@ int main(void)
             debug = true;
         }
     }
+
+    /* ------------------------------------------------------------------------------- */
+    /* now we can do our business                                                      */
+    /* ------------------------------------------------------------------------------- */
+    syslog(LOG_INFO, "Startup successfull" );
+
     
     if(wiringPiSetup()!=-1) {
         pinMode(SENSOR_LGT_PIN, INPUT);
