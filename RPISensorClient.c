@@ -77,8 +77,8 @@
  * Some globals we can't do without... ;)
  * ---------------------------------------------------------------------------------------
  */
-bool debug  = false;
-bool deaemon = true;
+bool debug    = false;
+bool deamon   = true;
 int  pidFilehandle = 0;
 char *pidfile = PID_FILE;
 
