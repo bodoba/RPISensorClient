@@ -91,8 +91,6 @@ bool get_id ( char* id ) {
         sprintf(id, "%02x%02x",s.ifr_addr.sa_data[4], s.ifr_addr.sa_data[5]);
         success = true;
     } else {
-        fprintf(stderr, "Error: Could not read MAC address if interface %s\n",
-                MQTT_INTERFACE );
         success = false;
     }
     return success;
@@ -125,13 +123,7 @@ void readSensor(char* id, int pin, char* name, uint8_t* old_value) {
  * ---------------------------------------------------------------------------------------
  */
 int main(int argc, char *argv[]) {
-{
     char id[8];
-    uint8_t lgt_value=100;
-    uint8_t snd_value=100;
-    uint8_t pir_value=100;
-
-    uint32_t countdown = REPORT_CYCLE;
 
     openlog(NULL, LOG_PID, LOG_USER);       /* use syslog to create a trace            */
     
@@ -139,10 +131,7 @@ int main(int argc, char *argv[]) {
     /* Process command line options                                                    */
     /* ------------------------------------------------------------------------------- */
     
-    /*
-     * FIXME: Use getopt_long and provide some help to the user just in case...
-     */
-    
+    /* FIXME: Use getopt_long and provide some help to the user just in case...        */
     for (int i=0; i<argc; i++) {
         if (!strcmp(argv[i], "-d")) {       /* '-d' turns debug mode on                */
             debug = true;
@@ -150,42 +139,61 @@ int main(int argc, char *argv[]) {
     }
 
     /* ------------------------------------------------------------------------------- */
-    /* now we can do our business                                                      */
+    /* Setup Wiring PI                                                                 */
     /* ------------------------------------------------------------------------------- */
-    syslog(LOG_INFO, "Startup successfull" );
-
-    
-    if(wiringPiSetup()!=-1) {
+    if(wiringPiSetup()==-1) {
+        syslog(LOG_ERR, "Could not setiup wiringPI");
+        exit(EXIT_FAILURE);
+    } else {
+        // Set pins sensors are connected to as input pins
         pinMode(SENSOR_LGT_PIN, INPUT);
         pinMode(SENSOR_SND_PIN, INPUT);
         pinMode(SENSOR_PIR_PIN, INPUT);
-        if ( get_id(id) ) {
-            if ( mqtt_init(MQTT_BROKER_IP, MQTT_BROKER_PORT)) {
-                // main cycle
-                for ( ;; ) {
-                    readSensor(id, SENSOR_LGT_PIN, "LGT", &lgt_value);
-                    readSensor(id, SENSOR_SND_PIN, "SND", &snd_value);
-                    readSensor(id, SENSOR_PIR_PIN, "PIR", &pir_value);
-                    
-                    if ( countdown > 0 ) {
-                        countdown--;
-                    } else {
-                        countdown = REPORT_CYCLE;
-                        // change value to enforce report of actual value
-                        lgt_value++;
-                        snd_value++;
-                        pir_value++;
-                    }
-                    sleep(CYCLE_TIME);
-                }
-                mqtt_end();
-            } else {
-                fprintf(stderr, "Error: Could not connect to MQTT broker: %s:%d\n",
-                        MQTT_BROKER_IP,
-                        MQTT_BROKER_PORT);
-            }
-            
-        }
     }
+
+    /* ------------------------------------------------------------------------------- */
+    /* get MQTT ID basen on MAC address                                                */
+    /* ------------------------------------------------------------------------------- */
+    if ( !get_id(id) ) {
+        syslog(LOG_ERR, "Could not read MAC address of interface %s\n", MQTT_INTERFACE );
+        exit(EXIT_FAILURE);
+    }
+
+    /* ------------------------------------------------------------------------------- */
+    /* initialize connection to MQTT server                                            */
+    /* ------------------------------------------------------------------------------- */
+    if ( !mqtt_init(MQTT_BROKER_IP, MQTT_BROKER_PORT)) {
+        syslog(LOG_ERR, "Unable to connect to MQTT broker at %s:%d",
+               MQTT_BROKER_IP, MQTT_BROKER_PORT);
+        exit(EXIT_FAILURE);
+    }
+    
+    /* ------------------------------------------------------------------------------- */
+    /* now we can do our business                                                      */
+    /* ------------------------------------------------------------------------------- */
+    syslog(LOG_INFO, "Startup successfull" );
+    
+    uint8_t  lgt_value=100;
+    uint8_t  snd_value=100;
+    uint8_t  pir_value=100;
+    uint32_t countdown = REPORT_CYCLE;
+
+    for ( ;; ) {
+        readSensor(id, SENSOR_LGT_PIN, "LGT", &lgt_value);
+        readSensor(id, SENSOR_SND_PIN, "SND", &snd_value);
+        readSensor(id, SENSOR_PIR_PIN, "PIR", &pir_value);
+        
+        if ( countdown > 0 ) {
+            countdown--;
+        } else {
+            countdown = REPORT_CYCLE;
+            // change value to enforce report of actual value
+            lgt_value++;
+            snd_value++;
+            pir_value++;
+        }
+        sleep(CYCLE_TIME);
+    }
+    mqtt_end();
     return 0;
 }
