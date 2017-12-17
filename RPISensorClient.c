@@ -77,9 +77,10 @@
  * Some globals we can't do without... ;)
  * ---------------------------------------------------------------------------------------
  */
-bool debug = false;
-int         pidFilehandle = 0;
-char        *pidfile = PID_FILE;
+bool debug  = false;
+bool daemon = true;
+int  pidFilehandle = 0;
+char *pidfile = PID_FILE;
 
 /*
  * ---------------------------------------------------------------------------------------
@@ -123,7 +124,7 @@ void sigendCB(int sigval)
 void shutdown_daemon(void) {
     closelog();
     mqtt_end();
-    if (!debug) {
+    if (deamon) {
         close(pidFilehandle);
         unlink(pidfile);
     }
@@ -195,7 +196,7 @@ int main(int argc, char *argv[]) {
     /* ------------------------------------------------------------------------------- */
     /* Deamonize                                                                       */
     /* ------------------------------------------------------------------------------- */
-    if (!debug) {
+    if (deamon) {
         /* If we got a good PID, then we can exit the parent process                   */
         pid_t pid = fork();
         if (pid < 0) {
@@ -227,7 +228,7 @@ int main(int argc, char *argv[]) {
     /* ------------------------------------------------------------------------------- */
     /* use lockfile to ensure only one copy is running                                 */
     /* ------------------------------------------------------------------------------- */
-    if (!debug) {
+    if (deamon) {
         pidFilehandle = open(pidfile, O_RDWR|O_CREAT, 0600);
         
         if (pidFilehandle != -1 ) {                       /* Open failed               */
