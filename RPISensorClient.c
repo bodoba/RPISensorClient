@@ -79,6 +79,8 @@
  * ---------------------------------------------------------------------------------------
  */
 bool debug = false;
+int         pidFilehandle = 0;
+char        *pidfile = PID_FILE;
 
 /*
  * ---------------------------------------------------------------------------------------
@@ -121,6 +123,7 @@ void sigendCB(int sigval)
  */
 void shutdown(void) {
     closelog();
+    mqtt_end();
     if (!debug) {
         close(pidFilehandle);
         unlink(pidfile);
@@ -176,8 +179,6 @@ void readSensor(char* id, int pin, char* name, uint8_t* old_value) {
  */
 int main(int argc, char *argv[]) {
     char id[8];
-    int         pidFilehandle = 0;
-    char        *pidfile = PID_FILE;
 
     openlog(NULL, LOG_PID, LOG_USER);       /* use syslog to create a trace            */
     
@@ -310,6 +311,11 @@ int main(int argc, char *argv[]) {
         }
         sleep(CYCLE_TIME);
     }
-    mqtt_end();
+    /* ------------------------------------------------------------------------------- */
+    /* finish up                                                                       */
+    /* ------------------------------------------------------------------------------- */
+    shutdown();
+    exit(EXIT_SUCCESS);
+
     return 0;
 }
