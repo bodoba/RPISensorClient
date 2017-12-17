@@ -32,11 +32,13 @@
 
 /* 
  * ---------------------------------------------------------------------------------------
- * MQTT Broker to connect to
+ * Default settings
  * ---------------------------------------------------------------------------------------
  */
-#define MQTT_BROKER     "192.168.100.26"
-#define MQTT_PORT       1883
+#define MQTT_BROKER_IP    "192.168.100.26"
+#define MQTT_BROKER_PORT  1883
+#define MQTT_KEEPALIVE    60
+#define PID_FILE          "/var/run/RPISensorClient.pid"
 
 /*
  * ---------------------------------------------------------------------------------------
@@ -62,6 +64,13 @@
  */
 #define CYCLE_TIME      1 // seconds between two readings
 #define REPORT_CYCLE  900 // how many cycles between two full reports
+
+/*
+ * ---------------------------------------------------------------------------------------
+ * Some globals we can't do without... ;)
+ * ---------------------------------------------------------------------------------------
+ */
+bool debug = false;
 
 void readSensor(char* id, int pin, char* name, uint8_t* value);
 bool get_id ( char* id );
@@ -120,15 +129,32 @@ int main(void)
     uint8_t lgt_value=100;
     uint8_t snd_value=100;
     uint8_t pir_value=100;
-    
+
     uint32_t countdown = REPORT_CYCLE;
+    
+    /* ------------------------------------------------------------------------------- */
+    /* Process command line options                                                    */
+    /* ------------------------------------------------------------------------------- */
+    
+    /*
+     * FIXME: Use getopt_long and provide some help to the user just in case...
+     */
+    
+    for (int i=0; i<argc; i++) {
+        if (!strcmp(argv[i], "-d")) {       /* '-d' turns debug mode on                */
+            debug = true;
+        }
+        if (!strcmp(argv[i], "-c")) {       /* '-c' specify configuration file         */
+            configFile = strdup(argv[++i]);
+        }
+    }
     
     if(wiringPiSetup()!=-1) {
         pinMode(SENSOR_LGT_PIN, INPUT);
         pinMode(SENSOR_SND_PIN, INPUT);
         pinMode(SENSOR_PIR_PIN, INPUT);
         if ( get_id(id) ) {
-            if ( mqtt_init(MQTT_BROKER, MQTT_PORT)) {
+            if ( mqtt_init(MQTT_BROKER_IP, MQTT_BROKER_PORT)) {
                 // main cycle
                 for ( ;; ) {
                     readSensor(id, SENSOR_LGT_PIN, "LGT", &lgt_value);
@@ -149,8 +175,8 @@ int main(void)
                 mqtt_end();
             } else {
                 fprintf(stderr, "Error: Could not connect to MQTT broker: %s:%d\n",
-                        MQTT_BROKER,
-                        MQTT_PORT);
+                        MQTT_BROKER_IP,
+                        MQTT_BROKER_PORT);
             }
             
         }
