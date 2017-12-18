@@ -1,3 +1,5 @@
+#!/bin/sh
+# description: Start or stop the MQTT action daemon
 # *********************************************************************************** *
 # Copyright 2017 by Bodo Bauer <bb@bb-zone.com>
 #
@@ -16,20 +18,43 @@
 # You should have received a copy of the GNU General Public License
 # along with ReadDHT11.  If not, see <http://www.gnu.org/licenses/>.
 # *********************************************************************************** *
+### BEGIN INIT INFO
+# Provides:             mqttactiond
+# Required-Start:       $local_fs $remote_fs
+# Required-Stop:        $local_fs $remote_fs
+# Default-Start:        2 3 4 5
+# Default-Stop:         0 1 6
+# Short-Description:    MQTT action daemon
+### END INIT INFO
 
-include(CheckIncludeFile)
-cmake_minimum_required(VERSION 3.6)
-project (RPISensorClient)
+BIN=/usr/sbin/rpisensorclient
+make in
+case "$1" in
+'start')
+  echo "Starting sensor client..."
+  $BIN -c $CNF
+  RETVAL=$?
+;;
 
-set (CMAKE_C_FLAGS "-Wall -std=gnu11 -lwiringPi -lmosquitto")
+'stop')
+  echo "Stopping sensor client..."
+  kill `cat $PID`
+  RETVAL=$?
+;;
 
-# all executables end up in bin
-set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
-set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib)
+'status')
+  cnt=`ps -ef | grep "rpisensorclient" | grep -v grep | wc -l`
+  if [ "$cnt" -eq "0" ] ; then
+    echo "Sensor client is not running"
+  else
+    echo "Sensor client is running"
+  fi
+;;
 
-add_executable(rpisensorclient RPISensorClient.c MQTT.c)
+*)
+  echo "Usage: $0 { start | stop | status }"
+  RETVAL=1
+;;
 
-
-INSTALL(FILES bin/rpisensorclient DESTINATION usr/sbin)
-
-add_subdirectory(Contrib)
+esac
+exit $RETVAL

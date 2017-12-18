@@ -17,19 +17,4 @@
 # along with ReadDHT11.  If not, see <http://www.gnu.org/licenses/>.
 # *********************************************************************************** *
 
-include(CheckIncludeFile)
-cmake_minimum_required(VERSION 3.6)
-project (RPISensorClient)
-
-set (CMAKE_C_FLAGS "-Wall -std=gnu11 -lwiringPi -lmosquitto")
-
-# all executables end up in bin
-set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
-set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib)
-
-add_executable(rpisensorclient RPISensorClient.c MQTT.c)
-
-
-INSTALL(FILES bin/rpisensorclient DESTINATION usr/sbin)
-
-add_subdirectory(Contrib)
+INSTALL(FILES rpisensorclient      DESTINATION etc/init.d)
