@@ -22,6 +22,8 @@ cmake_minimum_required(VERSION 3.6)
 project (RPISensorClient)
 
 set (CMAKE_C_FLAGS "-Wall -std=gnu11 -lwiringPi -lmosquitto")
+set(CMAKE_INSTALL_PREFIX /)
+
 
 # all executables end up in bin
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
