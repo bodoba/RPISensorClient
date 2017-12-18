@@ -32,7 +32,7 @@ make in
 case "$1" in
 'start')
   echo "Starting sensor client..."
-  $BIN -c $CNF
+  $BIN
   RETVAL=$?
 ;;
 
