@@ -70,7 +70,7 @@
  * ---------------------------------------------------------------------------------------
  */
 #define CYCLE_TIME      1 // seconds between two readings
-#define REPORT_CYCLE  900 // how many cycles between two full reports
+#define REPORT_CYCLE   30 // how many cycles between two full reports
 
 /* 
  * ---------------------------------------------------------------------------------------
