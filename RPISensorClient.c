@@ -305,9 +305,9 @@ int main(int argc, char *argv[]) {
     uint32_t countdown = REPORT_CYCLE;
 
     for ( ;; ) {
-        readSensor(id, SENSOR_LGT_PIN, "LGT", true, &lgt_value);
-        readSensor(id, SENSOR_SND_PIN, "SND", true, &snd_value);
-        readSensor(id, SENSOR_PIR_PIN, "PIR", true, &pir_value);
+        readSensor(id, SENSOR_LGT_PIN, "LGT", true,  &lgt_value);
+        readSensor(id, SENSOR_SND_PIN, "SND", true,  &snd_value);
+        readSensor(id, SENSOR_PIR_PIN, "PIR", false, &pir_value);
         
         if ( countdown > 0 ) {
             countdown--;
