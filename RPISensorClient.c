@@ -190,6 +190,9 @@ int main(int argc, char *argv[]) {
     for (int i=0; i<argc; i++) {
         if (!strcmp(argv[i], "-d")) {       /* '-d' turns debug mode on                */
             debug = true;
+            syslog(LOG_INFO, "Reading sensors every %d seconds", CYCLE_TIME);
+            syslog(LOG_INFO, "Reading sensors every %d seconds", CYCLE_TIME);
+            REPORT_CYCLE
         }
     }
 
