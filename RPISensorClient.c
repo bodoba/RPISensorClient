@@ -191,8 +191,7 @@ int main(int argc, char *argv[]) {
         if (!strcmp(argv[i], "-d")) {       /* '-d' turns debug mode on                */
             debug = true;
             syslog(LOG_INFO, "Reading sensors every %d seconds", CYCLE_TIME);
-            syslog(LOG_INFO, "Reading sensors every %d seconds", CYCLE_TIME);
-            REPORT_CYCLE
+            syslog(LOG_INFO, "Sending full report every %d cycles", REPORT_CYCLE);
         }
     }
 
