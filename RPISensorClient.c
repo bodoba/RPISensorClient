@@ -87,7 +87,7 @@ char *pidfile = PID_FILE;
  * Function prototypes
  * ---------------------------------------------------------------------------------------
  */
-void readSensor(char* id, int pin, char* name, uint8_t* value);
+void readSensor(char* id, int pin, char* name, bool invert, uint8_t* value);
 bool get_id ( char* id );
 void sigendCB(int sigval);
 void shutdown_daemon(void);
@@ -155,9 +155,16 @@ bool get_id ( char* id ) {
  * Read sensor and publish value to MQTT broker
  * ---------------------------------------------------------------------------------------
  */
-void readSensor(char* id, int pin, char* name, uint8_t* old_value) {
+void readSensor(char* id, int pin, char* name, bool invert, uint8_t* old_value) {
     char topic[32], msg[64];
     uint8_t new_value = digitalRead(pin);
+    if ( invert ) {
+        if ( new_value != 0 ) {
+            new_value = 0;
+        } else {
+            new_value = 1;
+        }
+    }
     if ( *old_value != new_value ) {
         *old_value = new_value;
         
@@ -298,9 +305,9 @@ int main(int argc, char *argv[]) {
     uint32_t countdown = REPORT_CYCLE;
 
     for ( ;; ) {
-        readSensor(id, SENSOR_LGT_PIN, "LGT", &lgt_value);
-        readSensor(id, SENSOR_SND_PIN, "SND", &snd_value);
-        readSensor(id, SENSOR_PIR_PIN, "PIR", &pir_value);
+        readSensor(id, SENSOR_LGT_PIN, "LGT", true, &lgt_value);
+        readSensor(id, SENSOR_SND_PIN, "SND", true, &snd_value);
+        readSensor(id, SENSOR_PIR_PIN, "PIR", true, &pir_value);
         
         if ( countdown > 0 ) {
             countdown--;
