@@ -307,6 +307,7 @@ int main(int argc, char *argv[]) {
         } else {
             countdown = REPORT_CYCLE;
             // change value to enforce report of actual value
+            syslog(LOG_INFO,"Trigger full report");
             lgt_value++;
             snd_value++;
             pir_value++;
