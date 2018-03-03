@@ -169,7 +169,7 @@ void readSensor(char* id, int pin, char* name, bool invert, uint8_t* old_value) 
     if ( *old_value != new_value ) {
         *old_value = new_value;
         
-        sprintf(topic, "%s/%d-%s/%d", name, prefix, id, pin);
+        sprintf(topic, "%s/%s-%s/%d", name, prefix, id, pin);
         sprintf(msg, "{\"%s\":\"%d\"}", name, new_value);
         if ( debug ) {
             syslog(LOG_INFO, "%s %s\n", topic, msg);
