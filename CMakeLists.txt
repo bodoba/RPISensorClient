@@ -29,7 +29,7 @@ find_library(LIB_WIRING wiringPi)
 TARGET_LINK_LIBRARIES(rpisensorclient "${LIB_MQTT}")
 TARGET_LINK_LIBRARIES(rpisensorclient "${LIB_WIRING}")
 
-set (CMAKE_C_FLAGS "-Wall -std=gnu11")
+set(CMAKE_C_FLAGS "-Wall -std=gnu11 ${LIB_MQTT}")
 set(CMAKE_INSTALL_PREFIX /)
 
 
