@@ -79,6 +79,7 @@
  */
 bool debug    = false;
 bool deamon   = true;
+char *prefix  = "BB";
 int  pidFilehandle = 0;
 char *pidfile = PID_FILE;
 
@@ -168,7 +169,7 @@ void readSensor(char* id, int pin, char* name, bool invert, uint8_t* old_value) 
     if ( *old_value != new_value ) {
         *old_value = new_value;
         
-        sprintf(topic, "%s/BB-%s/%d", name, id, pin);
+        sprintf(topic, "%s/%d-%s/%d", name, prefix, id, pin);
         sprintf(msg, "{\"%s\":\"%d\"}", name, new_value);
         if ( debug ) {
             syslog(LOG_INFO, "%s %s\n", topic, msg);
