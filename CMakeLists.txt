@@ -21,7 +21,8 @@ include(CheckIncludeFile)
 cmake_minimum_required(VERSION 3.5)
 project (RPISensorClient)
 
-set (CMAKE_C_FLAGS "-Wall -std=gnu11 -lwiringPi -lmosquitto")
+TARGET_LINK_LIBRARIES(wiringPi mosquitto)
+set (CMAKE_C_FLAGS "-Wall -std=gnu11")
 set(CMAKE_INSTALL_PREFIX /)
 
 
