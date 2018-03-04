@@ -106,6 +106,7 @@ void readSensor(char* id, int pin, char* name, bool invert, uint8_t* value);
 bool get_id ( char* id );
 void sigendCB(int sigval);
 void shutdown_daemon(void);
+void readConfig(void);
 
 /*
  * ---------------------------------------------------------------------------------------
@@ -194,6 +195,86 @@ void readSensor(char* id, int pin, char* name, bool invert, uint8_t* old_value) 
     }
 }
 
+
+/* *********************************************************************************** */
+/* read config file                                                                    */
+/* *********************************************************************************** */
+void readConfig(void) {
+    FILE *fp = NULL;
+    fp = fopen(configFile, "rb");
+    if (fp) {
+        char *line=NULL;
+        char *cursor;
+        int atIndex = 0;
+        
+        size_t n=0;
+        size_t length = getline(&line, &n, fp);
+        
+        while ( length != -1) {
+            if ( length > 1 ) {                              /* skip empty lines       */
+                cursor = line;
+                if ( line[length-1] == '\n' ) {             /* remove trailing newline */
+                    line[length-1] = '\0';
+                }
+                
+                while ( *cursor && *cursor == ' ' ) cursor++;           /* skip spaces */
+                
+                if ( *cursor != '#') {                          /* skip '#' comments   */
+                    
+                    /* line is neither empty not comment, so it should be a token and  */
+                    /* a value here                                                    */
+                    char *token=cursor;
+                    while (*cursor && *cursor != ' ') {
+                        cursor++;                  /* next whitespace terminates token */
+                    }
+                    *cursor = '\0';
+                    cursor++;
+                    while ( *cursor && *cursor == ' ' ) cursor++;       /* skip spaces */
+                    char *value=cursor;             /* the remaining line is the value */
+                    
+                    if (!strcmp(token, "MQTT_BROKER_IP")) {
+                        mqtt_broker_ip = strdup(value);
+                        syslog(LOG_INFO,
+                               "<%s> MQTT broker IP: %s",
+                               configFile, mqtt_broker_ip);
+                    } else if (!strcmp(token, "MQTT_BROKER_PORT")) {
+                        mqtt_broker_port = atoi(value);
+                        syslog(LOG_INFO,
+                               "<%s> MQTT broker port: %d",
+                               configFile, mqtt_broker_port);
+                    } else if (!strcmp(token, "MQTT_KEEPALIVE")) {
+                        mqtt_keepalive = atoi(value);
+                        syslog(LOG_INFO,
+                               "<%s> MQTT keepalive: %d",
+                               configFile, mqtt_keepalive);
+                    } else if (!strcmp(token, "PID_FILE")) {
+                        pidfile = strdup(value);
+                        syslog(LOG_INFO,
+                               "<%s> pid/lock file: %s",
+                               configFile, pidfile);
+                    } else {
+                        syslog(LOG_ERR,
+                               "<%s> Ignoring unknown confog file parameter: %s",
+                               configFile, token);
+                    }
+                }
+                
+                if (line) free(line);
+                n=0;
+                length = getline(&line, &n, fp);
+            }
+            fclose(fp);
+            /* terminate action table */
+            actionTable[atIndex].pattern  = NULL;
+            actionTable[atIndex].argument = NULL;
+            actionTable[atIndex].actionCB = NULL;
+            syslog(LOG_INFO, "%d entries in action table", atIndex);
+            
+        } else {
+            syslog(LOG_INFO, "No config file found");
+        }
+    }
+}
 
 /*
  * ---------------------------------------------------------------------------------------
