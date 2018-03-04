@@ -245,6 +245,12 @@ void readConfig(void) {
                     } else if (!strcmp(token, "MQTT_KEEPALIVE")) {
                         mqtt_keepalive = atoi(value);
                         syslog(LOG_INFO, "MQTT keepalive: %d", mqtt_keepalive);
+                    } else if (!strcmp(token, "CYCLE_TIME")) {
+                        cycle_time = atoi(value);
+                        syslog(LOG_INFO, "cycle time: %d", cycle_time);
+                    } else if (!strcmp(token, "REPORT_CYCLE")) {
+                        report_cycle = atoi(value);
+                        syslog(LOG_INFO, "report_cycle: %d", report_cycle);
                     } else if (!strcmp(token, "PID_FILE")) {
                         pidfile = strdup(value);
                         syslog(LOG_INFO, "pid/lock file: %s", pidfile);
