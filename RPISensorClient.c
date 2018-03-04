@@ -83,9 +83,9 @@ typedef struct {
 } sensor_t;
 
 sensor_t sensor_list[] = {
-    { 2, "LGT", false, 100},
-    { 3, "SND", false, 100},
-    {12, "PIR", true,  100},
+    { 2, "LGT", true,  100},
+    { 3, "SND", true,  100},
+    {12, "PIR", false, 100},
     { 0, NULL,  false, 100},
 };
 
