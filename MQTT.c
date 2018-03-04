@@ -24,14 +24,14 @@
 
 static struct mosquitto *mosq = NULL;
 
-bool mqtt_init( const char* broker, int port ) {
+bool mqtt_init( const char* broker, int port, int keepalive) {
     bool success = true;
     int err;
     
     mosquitto_lib_init();
     mosq = mosquitto_new(NULL, true, NULL);
     if(mosq){
-        err = mosquitto_connect(mosq, broker, port, MQTT_KEEPALIVE);
+        err = mosquitto_connect(mosq, broker, port, keepalive);
         if( err != MOSQ_ERR_SUCCESS ) {
             fprintf(stderr, "Error: mosquitto_connect [%s]\n", mosquitto_strerror(err));
             success = false;

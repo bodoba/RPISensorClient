@@ -295,7 +295,7 @@ int main(int argc, char *argv[]) {
     /* ------------------------------------------------------------------------------- */
     /* initialize connection to MQTT server                                            */
     /* ------------------------------------------------------------------------------- */
-    if ( !mqtt_init(MQTT_BROKER_IP, MQTT_BROKER_PORT)) {
+    if ( !mqtt_init(MQTT_BROKER_IP, MQTT_BROKER_PORT, MQTT_KEEPALIVE)) {
         syslog(LOG_ERR, "Unable to connect to MQTT broker at %s:%d",
                MQTT_BROKER_IP, MQTT_BROKER_PORT);
         exit(EXIT_FAILURE);
