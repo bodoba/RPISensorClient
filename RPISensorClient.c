@@ -203,10 +203,8 @@ void readConfig(void) {
     FILE *fp = NULL;
     fp = fopen(configFile, "rb");
     if (fp) {
-        char *line=NULL;
-        char *cursor;
-        int atIndex = 0;
-        
+        char  *line=NULL;
+        char  *cursor;
         size_t n=0;
         size_t length = getline(&line, &n, fp);
         
@@ -264,9 +262,9 @@ void readConfig(void) {
                 length = getline(&line, &n, fp);
             }
             fclose(fp);
-        } else {
-            syslog(LOG_INFO, "No config file found");
         }
+    } else {
+        syslog(LOG_INFO, "No config file found");
     }
 }
 
