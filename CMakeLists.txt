@@ -21,13 +21,11 @@ include(CheckIncludeFile)
 cmake_minimum_required(VERSION 3.5)
 project (RPISensorClient)
 
-
 find_library(LIB_MQTT mosquitto)
 find_library(LIB_WIRING wiringPi)
 
-set(CMAKE_C_FLAGS "-Wall -std=gnu11 ${LIB_MQTT}")
+set(CMAKE_C_FLAGS "-Wall -std=gnu11")
 set(CMAKE_INSTALL_PREFIX /)
-
 
 # all executables end up in bin
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
@@ -36,6 +34,7 @@ set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib)
 add_executable(rpisensorclient RPISensorClient.c MQTT.c)
 
 target_link_library(rpisensorclient "${LIB_MQTT}")
+target_link_library(rpisensorclient "${LIB_WIRING}")
 
 INSTALL(FILES bin/rpisensorclient DESTINATION usr/sbin)
 

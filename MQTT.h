@@ -28,8 +28,6 @@
 #include <stdbool.h>
 #include <string.h>
 
-#define MQTT_KEEPALIVE  60
-
 bool mqtt_init( const char* broker, int port );
 void mqtt_end( void );
 bool mqtt_publish ( const char *topic, const char *message );
