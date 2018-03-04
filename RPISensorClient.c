@@ -264,12 +264,6 @@ void readConfig(void) {
                 length = getline(&line, &n, fp);
             }
             fclose(fp);
-            /* terminate action table */
-            actionTable[atIndex].pattern  = NULL;
-            actionTable[atIndex].argument = NULL;
-            actionTable[atIndex].actionCB = NULL;
-            syslog(LOG_INFO, "%d entries in action table", atIndex);
-            
         } else {
             syslog(LOG_INFO, "No config file found");
         }
