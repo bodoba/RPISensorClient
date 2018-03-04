@@ -232,28 +232,24 @@ void readConfig(void) {
                     
                     if (!strcmp(token, "MQTT_BROKER_IP")) {
                         mqtt_broker_ip = strdup(value);
-                        syslog(LOG_INFO,
-                               "<%s> MQTT broker IP: %s",
-                               configFile, mqtt_broker_ip);
+                        syslog(LOG_INFO, "MQTT broker IP: %s", mqtt_broker_ip);
                     } else if (!strcmp(token, "MQTT_BROKER_PORT")) {
                         mqtt_broker_port = atoi(value);
-                        syslog(LOG_INFO,
-                               "<%s> MQTT broker port: %d",
-                               configFile, mqtt_broker_port);
+                        syslog(LOG_INFO, "MQTT broker port: %d", mqtt_broker_port);
+                    } else if (!strcmp(token, "PREFIX")) {
+                        prefix = strdup(value);
+                        syslog(LOG_INFO, "PREFIX: %s", prefix);
+                    } else if (!strcmp(token, "MQTT_INTERFACE")) {
+                        mqtt_interface = strdup(value);
+                        syslog(LOG_INFO, "MQTT interface: %s", mqtt_interface);
                     } else if (!strcmp(token, "MQTT_KEEPALIVE")) {
                         mqtt_keepalive = atoi(value);
-                        syslog(LOG_INFO,
-                               "<%s> MQTT keepalive: %d",
-                               configFile, mqtt_keepalive);
+                        syslog(LOG_INFO, "MQTT keepalive: %d", mqtt_keepalive);
                     } else if (!strcmp(token, "PID_FILE")) {
                         pidfile = strdup(value);
-                        syslog(LOG_INFO,
-                               "<%s> pid/lock file: %s",
-                               configFile, pidfile);
+                        syslog(LOG_INFO, "pid/lock file: %s", pidfile);
                     } else {
-                        syslog(LOG_ERR,
-                               "<%s> Ignoring unknown confog file parameter: %s",
-                               configFile, token);
+                        syslog(LOG_ERR, "Ignoring unknown confog file parameter: %s", token);
                     }
                 }
                 
