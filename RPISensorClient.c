@@ -91,7 +91,7 @@ char *pidfile = PID_FILE;
  */
 typedef struct {
     uint8_t pin;
-    char   *label
+    char   *label;
     bool   reverse;
 } sensor_t;
 
