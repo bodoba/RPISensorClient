@@ -54,20 +54,10 @@
 
 /*
  * ---------------------------------------------------------------------------------------
- * Where are the sensors connected to?
- * ---------------------------------------------------------------------------------------
- */
-#define SENSOR_LGT_PIN  2
-#define SENSOR_SND_PIN  3
-#define SENSOR_PIR_PIN 12
-
-/*
- * ---------------------------------------------------------------------------------------
  * Maximum number of sensors to be monitored
  * ---------------------------------------------------------------------------------------
  */
 #define MAX_SENSORS    16
-
 
 /*
  * ---------------------------------------------------------------------------------------
@@ -88,7 +78,7 @@ char *pidfile = PID_FILE;
 typedef struct {
     uint8_t pin;
     char    *label;
-    bool    reverse;
+    bool    invert;
     uint8_t value;
 } sensor_t;
 
@@ -282,7 +272,13 @@ int main(int argc, char *argv[]) {
         exit(EXIT_FAILURE);
     } else {
         // Set pins sensors are connected to as input pins
-        pinMode(SENSOR_LGT_PIN, INPUT);
+        uint8_t index=0;
+        while ( sensor_list[index].label ) {
+            pinMode(sensor_list[index].pin, INPUT);
+            index++;
+        }
+
+        
         pinMode(SENSOR_SND_PIN, INPUT);
         pinMode(SENSOR_PIR_PIN, INPUT);
     }
@@ -324,7 +320,7 @@ int main(int argc, char *argv[]) {
             readSensor(id,
                     sensor_list[index].pin,
                     sensor_list[index].label,
-                    sensor_list[index].reverse,
+                    sensor_list[index].invert,
                     &sensor_list[index].value);
             index++;
         }
