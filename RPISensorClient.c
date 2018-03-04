@@ -248,6 +248,9 @@ void readConfig(void) {
                     } else if (!strcmp(token, "CYCLE_TIME")) {
                         cycle_time = atoi(value);
                         syslog(LOG_INFO, "cycle time: %d", cycle_time);
+                    } else if (!strcmp(token, "DEBUG")) {
+                        debug = atoi(value);
+                        syslog(LOG_INFO, "debug: %d", debug);
                     } else if (!strcmp(token, "REPORT_CYCLE")) {
                         report_cycle = atoi(value);
                         syslog(LOG_INFO, "report_cycle: %d", report_cycle);
