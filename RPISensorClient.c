@@ -87,8 +87,9 @@ char *pidfile = PID_FILE;
  */
 typedef struct {
     uint8_t pin;
-    char   *label;
-    bool   reverse;
+    char    *label;
+    bool    reverse;
+    uint8_t value;
 } sensor_t;
 
 sensor_t sensor_list[] = {
@@ -321,9 +322,15 @@ int main(int argc, char *argv[]) {
     uint32_t countdown = REPORT_CYCLE;
 
     for ( ;; ) {
-        readSensor(id, SENSOR_LGT_PIN, "LGT", true,  &lgt_value);
-        readSensor(id, SENSOR_SND_PIN, "SND", true,  &snd_value);
-        readSensor(id, SENSOR_PIR_PIN, "PIR", false, &pir_value);
+        uint8_t index=0;
+        while ( sensor_list[index].label ) {
+            readSensor(id,
+                    sensor_list[index].pin,
+                    sensor_list[index].label,
+                    sensor_list[index].reverse,
+                    &sensor_list[index].value);
+            index++;
+        }
         
         if ( countdown > 0 ) {
             countdown--;
@@ -331,9 +338,11 @@ int main(int argc, char *argv[]) {
             countdown = REPORT_CYCLE;
             // change value to enforce report of actual value
             syslog(LOG_INFO,"Trigger full report");
-            lgt_value++;
-            snd_value++;
-            pir_value++;
+            uint8_t index=0;
+            while ( sensor_list[index].label ) {
+                sensor_list[index].value++;
+                index++;
+            }
         }
         sleep(CYCLE_TIME);
     }
