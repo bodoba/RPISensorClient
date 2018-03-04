@@ -46,11 +46,12 @@
 #define MQTT_BROKER_PORT  1883
 #define MQTT_KEEPALIVE    60
 #define PID_FILE          "/var/run/RPISensorClient.pid"
-#define CYCLE_TIME        1 // seconds between two readings
-#define REPORT_CYCLE      300 // how many cycles between two full reports
+#define CYCLE_TIME        1
+#define REPORT_CYCLE      300
 #define MQTT_INTERFACE    "eth0"
 #define DEBUG             0
 #define PREFIX            "BB"
+#define CONFIG_FILE       "/etc/rpisensorclient.cfg"
 
 /*
  * ---------------------------------------------------------------------------------------
@@ -64,11 +65,17 @@
  * Some globals we can't do without... ;)
  * ---------------------------------------------------------------------------------------
  */
-bool debug    = DEBUG;
-bool deamon   = true;
-char *prefix  = PREFIX;
-int  pidFilehandle = 0;
-char *pidfile = PID_FILE;
+int     pidFilehandle    = 0;
+bool    deamon           = true;
+bool    debug            = DEBUG;
+char    *prefix          = PREFIX;
+char    *pidfile         = PID_FILE;
+char    *configFile      = CONFIG_FILE;
+char    *mqtt_broker_ip  = MQTT_BROKER_IP;
+int     mqtt_broker_port = MQTT_BROKER_PORT;
+int     mqtt_keepalive   = MQTT_KEEPALIVE;
+int     report_cycle     = REPORT_CYCLE;
+int     cycle_time       = CYCLE_TIME;
 
 /*
  * ---------------------------------------------------------------------------------------
@@ -186,6 +193,7 @@ void readSensor(char* id, int pin, char* name, bool invert, uint8_t* old_value) 
     }
 }
 
+
 /*
  * ---------------------------------------------------------------------------------------
  * M A I N
@@ -204,8 +212,11 @@ int main(int argc, char *argv[]) {
     for (int i=0; i<argc; i++) {
         if (!strcmp(argv[i], "-d")) {       /* '-d' turns debug mode on                */
             debug = true;
-            syslog(LOG_INFO, "Reading sensors every %d seconds", CYCLE_TIME);
-            syslog(LOG_INFO, "Sending full report every %d cycles", REPORT_CYCLE);
+            syslog(LOG_INFO, "Reading sensors every %d seconds", cycle_time);
+            syslog(LOG_INFO, "Sending full report every %d cycles", report_cycle);
+        }
+        if (!strcmp(argv[i], "-c")) {       /* '-c' specify configuration file         */
+            configFile = strdup(argv[++i]);
         }
     }
 
@@ -283,16 +294,16 @@ int main(int argc, char *argv[]) {
     /* get MQTT ID basen on MAC address                                                */
     /* ------------------------------------------------------------------------------- */
     if ( !get_id(id) ) {
-        syslog(LOG_ERR, "Could not read MAC address of interface %s\n", MQTT_INTERFACE );
+        syslog(LOG_ERR, "Could not read MAC address of interface %s\n", mqtt_interface );
         exit(EXIT_FAILURE);
     }
 
     /* ------------------------------------------------------------------------------- */
     /* initialize connection to MQTT server                                            */
     /* ------------------------------------------------------------------------------- */
-    if ( !mqtt_init(MQTT_BROKER_IP, MQTT_BROKER_PORT, MQTT_KEEPALIVE)) {
+    if ( !mqtt_init(mqtt_broker_ip, mqtt_broker_port, mqtt_keepalive)) {
         syslog(LOG_ERR, "Unable to connect to MQTT broker at %s:%d",
-               MQTT_BROKER_IP, MQTT_BROKER_PORT);
+               mqtt_broker_ip, mqtt_broker_port);
         exit(EXIT_FAILURE);
     }
 
@@ -308,7 +319,7 @@ int main(int argc, char *argv[]) {
     /* ------------------------------------------------------------------------------- */
     syslog(LOG_INFO, "Startup successfull" );
     
-    uint32_t countdown = REPORT_CYCLE;
+    uint32_t countdown = report_cycle;
 
     for ( ;; ) {
         uint8_t index=0;
@@ -324,7 +335,7 @@ int main(int argc, char *argv[]) {
         if ( countdown > 0 ) {
             countdown--;
         } else {
-            countdown = REPORT_CYCLE;
+            countdown = report_cycle;
             // change value to enforce report of actual value
             syslog(LOG_INFO,"Trigger full report");
             uint8_t index=0;
@@ -333,7 +344,7 @@ int main(int argc, char *argv[]) {
                 index++;
             }
         }
-        sleep(CYCLE_TIME);
+        sleep(cycle_time);
     }
     /* ------------------------------------------------------------------------------- */
     /* finish up                                                                       */
