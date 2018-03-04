@@ -277,10 +277,6 @@ int main(int argc, char *argv[]) {
             pinMode(sensor_list[index].pin, INPUT);
             index++;
         }
-
-        
-        pinMode(SENSOR_SND_PIN, INPUT);
-        pinMode(SENSOR_PIR_PIN, INPUT);
     }
 
     /* ------------------------------------------------------------------------------- */
