@@ -39,21 +39,18 @@
 
 /* 
  * ---------------------------------------------------------------------------------------
- * Default settings
+ * Default settings - may be overwritten by config file values
  * ---------------------------------------------------------------------------------------
  */
 #define MQTT_BROKER_IP    "192.168.100.26"
 #define MQTT_BROKER_PORT  1883
 #define MQTT_KEEPALIVE    60
 #define PID_FILE          "/var/run/RPISensorClient.pid"
-
-/*
- * ---------------------------------------------------------------------------------------
- * Topic will be up from the last two bytes of this interface concatenated to the 
- * defined prefix and followed by the PIN number the sensor is connected to
- * ---------------------------------------------------------------------------------------
- */
-#define MQTT_INTERFACE  "eth0"
+#define CYCLE_TIME        1 // seconds between two readings
+#define REPORT_CYCLE      300 // how many cycles between two full reports
+#define MQTT_INTERFACE    "eth0"
+#define DEBUG             0
+#define PREFIX            "BB"
 
 /*
  * ---------------------------------------------------------------------------------------
@@ -66,23 +63,22 @@
 
 /*
  * ---------------------------------------------------------------------------------------
- * Intervals
+ * Maximum number of sensors to be monitored
  * ---------------------------------------------------------------------------------------
  */
-#define CYCLE_TIME      1 // seconds between two readings
-#define REPORT_CYCLE  300 // how many cycles between two full reports
+#define MAX_SENSORS    16
 
-/* 
+
+/*
  * ---------------------------------------------------------------------------------------
  * Some globals we can't do without... ;)
  * ---------------------------------------------------------------------------------------
  */
-bool debug    = false;
+bool debug    = DEBUG;
 bool deamon   = true;
-char *prefix  = "BB";
+char *prefix  = PREFIX;
 int  pidFilehandle = 0;
 char *pidfile = PID_FILE;
-
 
 /*
  * ---------------------------------------------------------------------------------------
@@ -95,6 +91,7 @@ typedef struct {
     bool   reverse;
 } sensor_t;
 
+sensor_t sensor_list[MAX_SENSORS];
 
 /*
  * ---------------------------------------------------------------------------------------
