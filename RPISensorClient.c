@@ -91,12 +91,12 @@ typedef struct {
     bool   reverse;
 } sensor_t;
 
-sensor_t sensor_list[MAX_SENSORS];
-
-sensor_list[0] = [ 2, "LGT", false];
-sensor_list[1] = [ 3, "SND", false];
-sensor_list[2] = [12, "PIR", true];
-sensor_list[3] = [ 0,  NULL, false];
+sensor_t sensor_list[] = {
+ { 2, "LGT", false},
+ { 3, "SND", false},
+ {12, "PIR", true},
+ { 0, NULL, false},
+};
 
 /*
  * ---------------------------------------------------------------------------------------
