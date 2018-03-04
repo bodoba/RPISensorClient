@@ -74,6 +74,7 @@ char    *configFile      = CONFIG_FILE;
 char    *mqtt_broker_ip  = MQTT_BROKER_IP;
 int     mqtt_broker_port = MQTT_BROKER_PORT;
 int     mqtt_keepalive   = MQTT_KEEPALIVE;
+char*   mqtt_interface   = MQTT_INTERFACE;
 int     report_cycle     = REPORT_CYCLE;
 int     cycle_time       = CYCLE_TIME;
 
