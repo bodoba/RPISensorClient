@@ -93,10 +93,10 @@ typedef struct {
 } sensor_t;
 
 sensor_t sensor_list[] = {
- { 2, "LGT", false},
- { 3, "SND", false},
- {12, "PIR", true},
- { 0, NULL, false},
+    { 2, "LGT", false, 100},
+    { 3, "SND", false, 100},
+    {12, "PIR", true,  100},
+    { 0, NULL,  false, 100},
 };
 
 /*
@@ -316,9 +316,6 @@ int main(int argc, char *argv[]) {
     /* ------------------------------------------------------------------------------- */
     syslog(LOG_INFO, "Startup successfull" );
     
-    uint8_t  lgt_value=100;
-    uint8_t  snd_value=100;
-    uint8_t  pir_value=100;
     uint32_t countdown = REPORT_CYCLE;
 
     for ( ;; ) {
