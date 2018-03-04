@@ -93,6 +93,11 @@ typedef struct {
 
 sensor_t sensor_list[MAX_SENSORS];
 
+sensor_list[0] = { 2, "LGT", 1};
+sensor_list[1] = { 3, "SND", 0};
+sensor_list[2] = {12, "PIR", 0};
+sensor_list[3] = { 0, NULL,  0};
+
 /*
  * ---------------------------------------------------------------------------------------
  * Function prototypes
