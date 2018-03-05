@@ -106,7 +106,7 @@ void readSensor(char* id, int pin, char* name, bool invert, uint8_t* value);
 bool get_id ( char* id );
 void sigendCB(int sigval);
 void shutdown_daemon(void);
-void readConfig(void);
+uint8_t readConfig(void);
 
 /*
  * ---------------------------------------------------------------------------------------
@@ -259,11 +259,12 @@ uint8_t readConfig(void) {
                     } else if (!strcmp(token, "SENSOR")) {
                         // need to read three values for a sensor entry
                         char *s_id, *s_pin, *s_label;
+                        
                         syslog(LOG_INFO, "Sensor %d: %s @ pin %d,%sinverted",
                                 num_sensors,
                                 sensor_list[num_sensors].label,
                                 sensor_list[num_sensors].pin,
-                                sensor_list[num_sensors].invert ? " " : " not ",
+                                (sensor_list[num_sensors].invert ? " " : " not ")
                                );
                         num_sensors++;
                     } else {
