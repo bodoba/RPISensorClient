@@ -94,7 +94,7 @@ sensor_t sensor_list[] = {
     { 2, "LGT", true,  100},
     { 3, "SND", true,  100},
     {12, "PIR", false, 100},
-    { 0, NULL,  false, 100},
+    { 0, NULL,  false, 0},
 };
 
 /*
@@ -195,13 +195,13 @@ void readSensor(char* id, int pin, char* name, bool invert, uint8_t* old_value) 
     }
 }
 
-
 /* *********************************************************************************** */
 /* read config file                                                                    */
 /* *********************************************************************************** */
-void readConfig(void) {
+uint8_t readConfig(void) {
     FILE *fp = NULL;
     fp = fopen(configFile, "rb");
+    uint8_t num_sensors=0;
     if (fp) {
         char  *line=NULL;
         char  *cursor;
@@ -218,7 +218,6 @@ void readConfig(void) {
                 while ( *cursor && *cursor == ' ' ) cursor++;           /* skip spaces */
                 
                 if ( *cursor != '#') {                          /* skip '#' comments   */
-                    
                     /* line is neither empty not comment, so it should be a token and  */
                     /* a value here                                                    */
                     char *token=cursor;
@@ -257,11 +256,20 @@ void readConfig(void) {
                     } else if (!strcmp(token, "PID_FILE")) {
                         pidfile = strdup(value);
                         syslog(LOG_INFO, "pid/lock file: %s", pidfile);
+                    } else if (!strcmp(token, "SENSOR")) {
+                        // need to read three values for a sensor entry
+                        char *s_id, *s_pin, *s_label;
+                        syslog(LOG_INFO, "Sensor %d: %s @ pin %d,%sinverted",
+                                num_sensors,
+                                sensor_list[num_sensors].label,
+                                sensor_list[num_sensors].pin,
+                                sensor_list[num_sensors].invert ? " " : " not ",
+                               );
+                        num_sensors++;
                     } else {
                         syslog(LOG_ERR, "Ignoring unknown confog file parameter: %s", token);
                     }
                 }
-                
                 if (line) free(line);
                 n=0;
                 length = getline(&line, &n, fp);
@@ -271,6 +279,13 @@ void readConfig(void) {
     } else {
         syslog(LOG_INFO, "No config file found");
     }
+    
+    // mark end of sensor list;
+    sensor_list[num_sensors].pin    = 0;
+    sensor_list[num_sensors].label  = NULL;
+    sensor_list[num_sensors].invert = 0;
+
+    return num_sensors;
 }
 
 /*
