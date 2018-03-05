@@ -264,14 +264,13 @@ uint8_t readConfig(void) {
                         s_pin = cursor;
                         while (*cursor && *cursor != ' ') cursor++;
                         *cursor = '\0'; cursor++;
-                        sensor_list[num_sensors].pin = atoi(s_id);
+                        sensor_list[num_sensors].pin = atoi(s_pin);
                         while (*cursor && *cursor == ' ') cursor++;
 
-                        
                         s_invert = cursor;
                         while (*cursor && *cursor != ' ') cursor++;
                         *cursor = '\0'; cursor++;
-                        sensor_list[num_sensors].invert = atoi(s_id);
+                        sensor_list[num_sensors].invert = atoi(s_invert);
                         while (*cursor && *cursor == ' ') cursor++;
 
                         sensor_list[num_sensors].label = cursor;
