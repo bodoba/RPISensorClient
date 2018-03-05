@@ -195,6 +195,7 @@ void readSensor(char* id, int pin, char* name, bool invert, uint8_t* old_value) 
     }
 }
 
+
 /* *********************************************************************************** */
 /* read config file                                                                    */
 /* *********************************************************************************** */
@@ -258,7 +259,22 @@ uint8_t readConfig(void) {
                         syslog(LOG_INFO, "pid/lock file: %s", pidfile);
                     } else if (!strcmp(token, "SENSOR")) {
                         // need to read three values for a sensor entry
-                        char *s_id, *s_pin, *s_label;
+                        char *s_invert, *s_pin, *s_label;
+                        
+                        s_pin = cursor;
+                        while (*cursor && *cursor != ' ') cursor++;
+                        *cursor = '\0'; cursor++;
+                        sensor_list[num_sensors].pin = atoi(s_id);
+                        while (*cursor && *cursor == ' ') cursor++;
+
+                        
+                        s_invert = cursor;
+                        while (*cursor && *cursor != ' ') cursor++;
+                        *cursor = '\0'; cursor++;
+                        sensor_list[num_sensors].invert = atoi(s_id);
+                        while (*cursor && *cursor == ' ') cursor++;
+
+                        sensor_list[num_sensors].label = cursor;
                         
                         syslog(LOG_INFO, "Sensor %d: %s @ pin %d,%sinverted",
                                 num_sensors,
