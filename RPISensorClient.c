@@ -220,7 +220,7 @@ uint8_t readConfig(void) {
                 syslog(LOG_INFO, "line: %s", line);
 
                 
-                while ( *cursor && *cursor == ' ' ) cursor++;   /* skip leading spaces */
+                //while ( *cursor && *cursor == ' ' ) cursor++;   /* skip leading spaces */
                 
                 if ( 0 ) { // *cursor != '#') {                          /* skip '#' comments   */
                     /* line is neither empty not comment, so it should be a token and  */
