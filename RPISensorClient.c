@@ -231,7 +231,9 @@ uint8_t readConfig(void) {
                     cursor++;
                     while ( *cursor && *cursor == ' ' ) cursor++;       /* skip spaces */
                     char *value=cursor;             /* the remaining line is the value */
-                    
+                    syslog(LOG_INFO, "Token: %s", token);
+                    syslog(LOG_INFO, "Value: %s", value);
+
                     if (!strcmp(token, "MQTT_BROKER_IP")) {
                         mqtt_broker_ip = strdup(value);
                         syslog(LOG_INFO, "X");
