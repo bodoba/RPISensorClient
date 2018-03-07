@@ -261,7 +261,7 @@ uint8_t readConfig(void) {
                         syslog(LOG_INFO, "pid/lock file: %s", pidfile);
                     } else if (!strcmp(token, "SENSOR")) {
                         // need to read three values for a sensor entry
-                        char *s_invert, *s_pin, *s_label;
+                        char *s_invert, *s_pin;
                         
                         s_pin = cursor;
                         while (*cursor && *cursor != ' ') cursor++;
