@@ -295,7 +295,7 @@ uint8_t readConfig(void) {
             fclose(fp);
         }
     } else {
-        syslog(LOG_INFO, "No config file found");
+        syslog(LOG_INFO, "Config file %s not found", configFile);
     }
     
     // mark end of sensor list;
