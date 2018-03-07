@@ -222,7 +222,7 @@ uint8_t readConfig(void) {
                 
                 while ( *cursor && *cursor == ' ' ) cursor++;   /* skip leading spaces */
                 
-                if ( *cursor != '#') {                          /* skip '#' comments   */
+                if ( 0 ) { // *cursor != '#') {                          /* skip '#' comments   */
                     /* line is neither empty not comment, so it should be a token and  */
                     /* a value here                                                    */
                     char *token=cursor;
@@ -272,7 +272,7 @@ uint8_t readConfig(void) {
                         syslog(LOG_INFO, "X");
 
                     } else if (!strcmp(token, "SENSOR")) {
-  /*
+  
                         // need to read three values for a sensor entry
                         char *s_invert, *s_pin;
                         
@@ -299,7 +299,6 @@ uint8_t readConfig(void) {
                                    );
                         }
                         num_sensors++;
-*/
                     } else {
                         syslog(LOG_ERR, "Ignoring unknown confog file parameter: %s", token);
                     }
