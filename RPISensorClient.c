@@ -234,31 +234,22 @@ uint8_t readConfig(void) {
                     
                     if (!strcmp(token, "MQTT_BROKER_IP")) {
                         mqtt_broker_ip = strdup(value);
-                        syslog(LOG_INFO, "MQTT broker IP: %s", mqtt_broker_ip);
                     } else if (!strcmp(token, "MQTT_BROKER_PORT")) {
                         mqtt_broker_port = atoi(value);
-                        syslog(LOG_INFO, "MQTT broker port: %d", mqtt_broker_port);
                     } else if (!strcmp(token, "PREFIX")) {
                         prefix = strdup(value);
-                        syslog(LOG_INFO, "PREFIX: %s", prefix);
                     } else if (!strcmp(token, "MQTT_INTERFACE")) {
                         mqtt_interface = strdup(value);
-                        syslog(LOG_INFO, "MQTT interface: %s", mqtt_interface);
                     } else if (!strcmp(token, "MQTT_KEEPALIVE")) {
                         mqtt_keepalive = atoi(value);
-                        syslog(LOG_INFO, "MQTT keepalive: %d", mqtt_keepalive);
                     } else if (!strcmp(token, "CYCLE_TIME")) {
                         cycle_time = atoi(value);
-                        syslog(LOG_INFO, "cycle time: %d", cycle_time);
                     } else if (!strcmp(token, "DEBUG")) {
                         debug = atoi(value);
-                        syslog(LOG_INFO, "debug: %d", debug);
                     } else if (!strcmp(token, "REPORT_CYCLE")) {
                         report_cycle = atoi(value);
-                        syslog(LOG_INFO, "report_cycle: %d", report_cycle);
                     } else if (!strcmp(token, "PID_FILE")) {
                         pidfile = strdup(value);
-                        syslog(LOG_INFO, "pid/lock file: %s", pidfile);
                     } else if (!strcmp(token, "SENSOR")) {
                         // need to read three values for a sensor entry
                         char *s_invert, *s_pin;
@@ -268,21 +259,23 @@ uint8_t readConfig(void) {
                         *cursor = '\0'; cursor++;
                         sensor_list[num_sensors].pin = atoi(s_pin);
                         while (*cursor && *cursor == ' ') cursor++;
-
+                        
                         s_invert = cursor;
                         while (*cursor && *cursor != ' ') cursor++;
                         *cursor = '\0'; cursor++;
                         sensor_list[num_sensors].invert = atoi(s_invert);
                         while (*cursor && *cursor == ' ') cursor++;
-
+                        
                         sensor_list[num_sensors].label = cursor;
                         
-                        syslog(LOG_INFO, "Sensor %d: %s @ pin %d,%sinverted",
-                                num_sensors,
-                                sensor_list[num_sensors].label,
-                                sensor_list[num_sensors].pin,
-                                (sensor_list[num_sensors].invert ? " " : " not ")
-                               );
+                        if ( debug ) {
+                            syslog(LOG_INFO, "Sensor %d: %s @ pin %d,%sinverted",
+                                   num_sensors,
+                                   sensor_list[num_sensors].label,
+                                   sensor_list[num_sensors].pin,
+                                   (sensor_list[num_sensors].invert ? " " : " not ")
+                                   );
+                        }
                         num_sensors++;
                     } else {
                         syslog(LOG_ERR, "Ignoring unknown confog file parameter: %s", token);
@@ -324,8 +317,6 @@ int main(int argc, char *argv[]) {
     for (int i=0; i<argc; i++) {
         if (!strcmp(argv[i], "-d")) {       /* '-d' turns debug mode on                */
             debug = true;
-            syslog(LOG_INFO, "Reading sensors every %d seconds", cycle_time);
-            syslog(LOG_INFO, "Sending full report every %d cycles", report_cycle);
         }
         if (!strcmp(argv[i], "-c")) {       /* '-c' specify configuration file         */
             configFile = strdup(argv[++i]);
@@ -339,6 +330,17 @@ int main(int argc, char *argv[]) {
     if ( num_sensors==0) {
         syslog(LOG_ERR, "No sensor configuration found in %s", configFile);
         exit(EXIT_FAILURE);
+    }
+    
+    if ( debug ) {
+        syslog(LOG_INFO, "MQTT broker IP: %s",   mqtt_broker_ip);
+        syslog(LOG_INFO, "MQTT broker port: %d", mqtt_broker_port);
+        syslog(LOG_INFO, "MQTT interface: %s",   mqtt_interface);
+        syslog(LOG_INFO, "MQTT keepalive: %d",   mqtt_keepalive);
+        syslog(LOG_INFO, "PREFIX: %s",           prefix);
+        syslog(LOG_INFO, "Cycle time: %d", cycle_time);
+        syslog(LOG_INFO, "Report Cycle: %d",     report_cycle);
+        syslog(LOG_INFO, "pid/lock file: %s",    pidfile);
     }
     
     exit(0);
