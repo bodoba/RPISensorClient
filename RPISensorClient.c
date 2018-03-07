@@ -305,7 +305,7 @@ uint8_t readConfig(void) {
                 }
                 
                 if (*line) {
-                    free(*line);
+                    free(line);
                     *line = NULL;
                 }
                 n=0;
