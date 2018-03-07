@@ -222,6 +222,7 @@ uint8_t readConfig(void) {
                 
                 //while ( *cursor && *cursor == ' ' ) cursor++;   /* skip leading spaces */
                 
+#ifdef NOWAY
                 if ( false ) { // *cursor != '#') {                          /* skip '#' comments   */
                     /* line is neither empty not comment, so it should be a token and  */
                     /* a value here                                                    */
@@ -303,7 +304,7 @@ uint8_t readConfig(void) {
                         syslog(LOG_ERR, "Ignoring unknown confog file parameter: %s", token);
                     }
                 }
-                
+#endif
                 if (line) {
                   free(line);
                   line = NULL;
