@@ -222,7 +222,7 @@ uint8_t readConfig(void) {
                 
                 //while ( *cursor && *cursor == ' ' ) cursor++;   /* skip leading spaces */
                 
-                if ( 0 ) { // *cursor != '#') {                          /* skip '#' comments   */
+                if ( false ) { // *cursor != '#') {                          /* skip '#' comments   */
                     /* line is neither empty not comment, so it should be a token and  */
                     /* a value here                                                    */
                     char *token=cursor;
@@ -304,10 +304,10 @@ uint8_t readConfig(void) {
                     }
                 }
                 
-//                if (line) {
-  //                  free(line);
-    //                line = NULL;
-      //          }
+                if (line) {
+                  free(line);
+                  line = NULL;
+                }
                 n=0;
                 length = getline(&line, &n, fp);
             }
