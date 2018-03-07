@@ -217,17 +217,19 @@ uint8_t readConfig(void) {
                 if ( line[length-1] == '\n' ) {             /* remove trailing newline */
                     line[length-1] = '\0';
                 }
+                syslog(LOG_INFO, "line: %s", line);
+
                 
-                while ( *cursor && *cursor == ' ' ) cursor++;           /* skip spaces */
+                while ( *cursor && *cursor == ' ' ) cursor++;   /* skip leading spaces */
                 
                 if ( *cursor != '#') {                          /* skip '#' comments   */
                     /* line is neither empty not comment, so it should be a token and  */
                     /* a value here                                                    */
                     char *token=cursor;
-                    while (*cursor && *cursor != ' ') {
+                    while (*cursor && *cursor != ' ') {                  /* skip token */
                         cursor++;                  /* next whitespace terminates token */
                     }
-                    *cursor = '\0';
+                    *cursor = '\0';                                    /* end of token */
                     cursor++;
                     while ( *cursor && *cursor == ' ' ) cursor++;       /* skip spaces */
                     char *value=cursor;             /* the remaining line is the value */
