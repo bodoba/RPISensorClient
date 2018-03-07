@@ -251,6 +251,7 @@ uint8_t readConfig(void) {
                     } else if (!strcmp(token, "PID_FILE")) {
                         pidfile = strdup(value);
                     } else if (!strcmp(token, "SENSOR")) {
+  /*
                         // need to read three values for a sensor entry
                         char *s_invert, *s_pin;
                         
@@ -277,6 +278,7 @@ uint8_t readConfig(void) {
                                    );
                         }
                         num_sensors++;
+*/
                     } else {
                         syslog(LOG_ERR, "Ignoring unknown confog file parameter: %s", token);
                     }
