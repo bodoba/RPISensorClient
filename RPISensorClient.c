@@ -303,9 +303,10 @@ uint8_t readConfig(void) {
                         syslog(LOG_ERR, "Ignoring unknown confog file parameter: %s", token);
                     }
                 }
-                if (line) {
-                    free(line);
-                    line = NULL;
+                
+                if (*line) {
+                    free(*line);
+                    *line = NULL;
                 }
                 n=0;
                 length = getline(&line, &n, fp);
