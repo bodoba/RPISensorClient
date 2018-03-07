@@ -304,9 +304,9 @@ uint8_t readConfig(void) {
                     }
                 }
                 
-                if (*line) {
+                if (line) {
                     free(line);
-                    *line = NULL;
+                    line = NULL;
                 }
                 n=0;
                 length = getline(&line, &n, fp);
