@@ -234,22 +234,39 @@ uint8_t readConfig(void) {
                     
                     if (!strcmp(token, "MQTT_BROKER_IP")) {
                         mqtt_broker_ip = strdup(value);
+                        syslog(LOG_INFO, "X");
                     } else if (!strcmp(token, "MQTT_BROKER_PORT")) {
                         mqtt_broker_port = atoi(value);
+                        syslog(LOG_INFO, "X");
+
                     } else if (!strcmp(token, "PREFIX")) {
                         prefix = strdup(value);
+                        syslog(LOG_INFO, "X");
+
                     } else if (!strcmp(token, "MQTT_INTERFACE")) {
                         mqtt_interface = strdup(value);
+                        syslog(LOG_INFO, "X");
+
                     } else if (!strcmp(token, "MQTT_KEEPALIVE")) {
                         mqtt_keepalive = atoi(value);
+                        syslog(LOG_INFO, "X");
+
                     } else if (!strcmp(token, "CYCLE_TIME")) {
                         cycle_time = atoi(value);
+                        syslog(LOG_INFO, "X");
+
                     } else if (!strcmp(token, "DEBUG")) {
                         debug = atoi(value);
+                        syslog(LOG_INFO, "X");
+
                     } else if (!strcmp(token, "REPORT_CYCLE")) {
                         report_cycle = atoi(value);
+                        syslog(LOG_INFO, "X");
+
                     } else if (!strcmp(token, "PID_FILE")) {
                         pidfile = strdup(value);
+                        syslog(LOG_INFO, "X");
+
                     } else if (!strcmp(token, "SENSOR")) {
   /*
                         // need to read three values for a sensor entry
