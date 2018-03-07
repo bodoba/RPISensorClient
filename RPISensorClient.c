@@ -209,6 +209,8 @@ uint8_t readConfig(void) {
         size_t n=0;
         size_t length = getline(&line, &n, fp);
         
+        syslog(LOG_INFO, "Reading configuration from %s", configFile);
+
         while ( length != -1) {
             if ( length > 1 ) {                              /* skip empty lines       */
                 cursor = line;
@@ -330,6 +332,15 @@ int main(int argc, char *argv[]) {
         }
     }
 
+    /* ------------------------------------------------------------------------------- */
+    /* Read configuration                                                              */
+    /* ------------------------------------------------------------------------------- */
+    uint8_t num_sensors = readConfig();
+    if ( num_sensors==0) {
+        syslog(LOG_ERR, "No sensor configuration found in %s", configFile);
+        exit(EXIT_FAILURE);
+    }
+    
     /* ------------------------------------------------------------------------------- */
     /* Deamonize                                                                       */
     /* ------------------------------------------------------------------------------- */
