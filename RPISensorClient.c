@@ -226,8 +226,12 @@ uint8_t readConfig(void) {
                     char *token=cursor;
                     while (*cursor && *cursor != ' ') cursor++;          /* skip token */
                     *cursor = '\0';                                    /* end of token */
+                    while (*cursor && *cursor == ' ') cursor++;         /* skip spaces */
+                    char *value=cursor;
+                    
+                    syslog(LOG_INFO, " T: '%s'", token);
+                    syslog(LOG_INFO, " V: '%s'", value);
 
-                    syslog(LOG_INFO, "  Token: %s", token);
                 }
             }
             free(line);
