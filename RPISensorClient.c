@@ -252,11 +252,11 @@ uint8_t readConfig(void) {
                         while (*cursor && *cursor != ' ') cursor++; /* skip pin value */
                         *cursor = '\0'; cursor++;                   /*     end of pin */
                         while (*cursor && *cursor == ' ') cursor++; /*    skip spaces */
-                        s_invert = value;
+                        s_invert = cursor;
                         while (*cursor && *cursor != ' ') cursor++; /* skip pin value */
                         *cursor = '\0'; cursor++;                   /*     end of pin */
                         while (*cursor && *cursor == ' ') cursor++; /*    skip spaces */
-                        s_label = value;
+                        s_label = cursor;
 
                         syslog(LOG_INFO, "   P: '%s'", s_pin);
                         syslog(LOG_INFO, "   I: '%s'", s_invert);
