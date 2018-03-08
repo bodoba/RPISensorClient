@@ -260,7 +260,7 @@ uint8_t readConfig(void) {
                         sensor_list[num_sensors].invert = atoi(s_invert);
 
                         while (*cursor && *cursor == ' ') cursor++; /*    skip spaces */
-                        sensor_list[num_sensors].label = cursor;
+                        sensor_list[num_sensors].label = strdup(cursor);
                         
                         if ( debug ) {
                             syslog(LOG_INFO, "Sensor %d: %s @ pin %d,%sinverted",
