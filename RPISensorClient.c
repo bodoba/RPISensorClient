@@ -58,7 +58,7 @@
  * Maximum number of sensors to be monitored
  * ---------------------------------------------------------------------------------------
  */
-#define MAX_SENSORS    16
+#define MAX_SENSORS    32
 
 /*
  * ---------------------------------------------------------------------------------------
@@ -90,12 +90,7 @@ typedef struct {
     uint8_t value;
 } sensor_t;
 
-sensor_t sensor_list[] = {
-    { 2, "LGT", true,  100},
-    { 3, "SND", true,  100},
-    {12, "PIR", false, 100},
-    { 0, NULL,  false, 0},
-};
+sensor_t sensor_list[MAX_SENSORS];
 
 /*
  * ---------------------------------------------------------------------------------------
@@ -156,7 +151,7 @@ bool get_id ( char* id ) {
     struct ifreq s;
     int fd = socket(PF_INET, SOCK_DGRAM, IPPROTO_IP);
     
-    strcpy(s.ifr_name, MQTT_INTERFACE );
+    strcpy(s.ifr_name, mqtt_interface );
     if (0 == ioctl(fd, SIOCGIFHWADDR, &s)) {
         sprintf(id, "%02x%02x",s.ifr_addr.sa_data[4], s.ifr_addr.sa_data[5]);
         success = true;
