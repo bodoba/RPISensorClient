@@ -195,8 +195,6 @@ void readSensor(char* id, int pin, char* name, bool invert, uint8_t* old_value) 
     }
 }
 
-
-
 /* *********************************************************************************** */
 /* read config file                                                                    */
 /* *********************************************************************************** */
@@ -211,6 +209,8 @@ uint8_t readConfig(void) {
         size_t n=0;
         size_t length = getline(&line, &n, fp);
         
+        /* FIXME: look for a lib to read confoig values and replace this hack...       */
+
         syslog(LOG_INFO, "Reading configuration from %s", configFile);
         
         while ( length != -1) {
@@ -326,8 +326,6 @@ int main(int argc, char *argv[]) {
         syslog(LOG_INFO, "Report Cycle: %d",     report_cycle);
         syslog(LOG_INFO, "pid/lock file: %s",    pidfile);
     }
-    
-    exit(0);
     
     /* ------------------------------------------------------------------------------- */
     /* Deamonize                                                                       */
