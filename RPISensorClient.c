@@ -220,8 +220,6 @@ uint8_t readConfig(void) {
                     line[length-1] = '\0';
                 }
                 
-                syslog(LOG_INFO, "line: %s", line);
-
                 if ( *cursor != '#') {                          /* skip '#' comments   */
                     syslog(LOG_INFO, "line: %s", line);
                 }
