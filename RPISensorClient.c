@@ -246,22 +246,21 @@ uint8_t readConfig(void) {
                     } else if (!strcmp(token, "PID_FILE")) {
                         pidfile = strdup(value);
                     } else if (!strcmp(token, "SENSOR")) {
-                        syslog(LOG_INFO, " S: '%s'", value);
                         char *s_pin, *s_invert;
+
                         s_pin = value;
-                        
                         while (*cursor && *cursor != ' ') cursor++; /* skip pin value */
                         *cursor = '\0'; cursor++;                   /*     end of pin */
+                        sensor_list[num_sensors].pin = atoi(s_pin);
+                        
                         while (*cursor && *cursor == ' ') cursor++; /*    skip spaces */
                         s_invert = cursor;
-                        
                         while (*cursor && *cursor != ' ') cursor++; /* skip pin value */
                         *cursor = '\0'; cursor++;                   /*     end of pin */
+                        sensor_list[num_sensors].invert = atoi(s_invert);
+
                         while (*cursor && *cursor == ' ') cursor++; /*    skip spaces */
                         sensor_list[num_sensors].label = cursor;
-                        
-                        sensor_list[num_sensors].pin = atoi(s_pin);
-                        sensor_list[num_sensors].invert = atoi(s_invert);
                         
                         if ( debug ) {
                             syslog(LOG_INFO, "Sensor %d: %s @ pin %d,%sinverted",
