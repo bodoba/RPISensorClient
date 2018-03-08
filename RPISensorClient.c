@@ -221,16 +221,12 @@ uint8_t readConfig(void) {
                 }
                 
                 if ( *cursor != '#') {                          /* skip '#' comments   */
-                    syslog(LOG_INFO, "IN: %s", line);
-
                     char *token=cursor;
-                    while (*cursor && *cursor != ' ') cursor++;          /* skip token */
+                    while (*cursor && *cursor != ' ') cursor++;        /*   skip token */
                     *cursor = '\0';                                    /* end of token */
                     cursor++;
-                    while (*cursor && *cursor == ' ') cursor++;         /* skip spaces */
+                    while (*cursor && *cursor == ' ') cursor++;        /* skip spaces  */
                     char *value=cursor;
-                    syslog(LOG_INFO, " T: '%s'", token);
-                    syslog(LOG_INFO, " V: '%s'", value);
 
                     if (!strcmp(token, "MQTT_BROKER_IP")) {
                         mqtt_broker_ip = strdup(value);
@@ -251,6 +247,7 @@ uint8_t readConfig(void) {
                     } else if (!strcmp(token, "PID_FILE")) {
                         pidfile = strdup(value);
                     } else if (!strcmp(token, "SENSOR")) {
+                        syslog(LOG_INFO, " S: '%s'", value);
                         num_sensors++;
                     }
                 }
