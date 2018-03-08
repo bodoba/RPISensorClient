@@ -247,7 +247,7 @@ uint8_t readConfig(void) {
                         pidfile = strdup(value);
                     } else if (!strcmp(token, "SENSOR")) {
                         syslog(LOG_INFO, " S: '%s'", value);
-                        char *s_pin, *s_invert, s_label;
+                        char *s_pin, *s_invert, *s_label;
                         s_pin = value;
                         while (*cursor && *cursor != ' ') cursor++; /* skip pin value */
                         *cursor = '\0'; cursor++;                   /*     end of pin */
@@ -260,7 +260,7 @@ uint8_t readConfig(void) {
 
                         syslog(LOG_INFO, "   P: '%s'", s_pin);
                         syslog(LOG_INFO, "   I: '%s'", s_invert);
-                        syslog(LOG_INFO, "   L: '%s'", s_label);                        
+                        syslog(LOG_INFO, "   L: '%s'", s_label);
                         
                         num_sensors++;
                     }
