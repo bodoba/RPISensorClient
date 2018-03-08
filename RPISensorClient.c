@@ -196,6 +196,43 @@ void readSensor(char* id, int pin, char* name, bool invert, uint8_t* old_value) 
 }
 
 
+
+/* *********************************************************************************** */
+/* read config file                                                                    */
+/* *********************************************************************************** */
+uint8_t readConfig(void) {
+    FILE *fp = NULL;
+    fp = fopen(configFile, "rb");
+    uint8_t num_sensors=0;
+ 
+    if (fp) {
+        char  *line=NULL;
+        char  *cursor;
+        size_t n=0;
+        size_t length = getline(&line, &n, fp);
+        
+        syslog(LOG_INFO, "Reading configuration from %s", configFile);
+        
+        while ( length != -1) {
+            if ( length > 1 ) {                              /* skip empty lines       */
+                cursor = line;
+                if ( line[length-1] == '\n' ) {             /* remove trailing newline */
+                    line[length-1] = '\0';
+                }
+                
+                syslog(LOG_INFO, "line: %s", line);
+            }
+    
+            free(line);
+            n=0;
+            length = getline(&line, &n, fp);
+        }
+        fclose(fp);
+    }
+}
+
+#ifdef XXXX
+
 /* *********************************************************************************** */
 /* read config file                                                                    */
 /* *********************************************************************************** */
@@ -217,6 +254,7 @@ uint8_t readConfig(void) {
                 if ( line[length-1] == '\n' ) {             /* remove trailing newline */
                     line[length-1] = '\0';
                 }
+                
                 syslog(LOG_INFO, "line: %s", line);
 
                 
@@ -325,6 +363,8 @@ uint8_t readConfig(void) {
 
     return num_sensors;
 }
+#endif
+
 
 /*
  * ---------------------------------------------------------------------------------------
