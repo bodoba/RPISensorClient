@@ -251,7 +251,7 @@ uint8_t readConfig(void) {
                     } else if (!strcmp(token, "PID_FILE")) {
                         pidfile = strdup(value);
                     } else if (!strcmp(token, "SENSOR")) {
-                        num_sensor++;
+                        num_sensors++;
                     }
                 }
             }
