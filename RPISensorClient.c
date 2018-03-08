@@ -280,6 +280,11 @@ uint8_t readConfig(void) {
         }
         fclose(fp);
     }
+    
+    sensor_list[num_sensors].label  = NULL;
+    sensor_list[num_sensors].pin    = 0;
+    sensor_list[num_sensors].invert = 0;
+
     return (num_sensors);
 }
 
