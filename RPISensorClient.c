@@ -247,21 +247,30 @@ uint8_t readConfig(void) {
                         pidfile = strdup(value);
                     } else if (!strcmp(token, "SENSOR")) {
                         syslog(LOG_INFO, " S: '%s'", value);
-                        char *s_pin, *s_invert, *s_label;
+                        char *s_pin, *s_invert;
                         s_pin = value;
+                        
                         while (*cursor && *cursor != ' ') cursor++; /* skip pin value */
                         *cursor = '\0'; cursor++;                   /*     end of pin */
                         while (*cursor && *cursor == ' ') cursor++; /*    skip spaces */
                         s_invert = cursor;
+                        
                         while (*cursor && *cursor != ' ') cursor++; /* skip pin value */
                         *cursor = '\0'; cursor++;                   /*     end of pin */
                         while (*cursor && *cursor == ' ') cursor++; /*    skip spaces */
-                        s_label = cursor;
-
-                        syslog(LOG_INFO, "   P: '%s'", s_pin);
-                        syslog(LOG_INFO, "   I: '%s'", s_invert);
-                        syslog(LOG_INFO, "   L: '%s'", s_label);
+                        sensor_list[num_sensors].label = cursor;
                         
+                        sensor_list[num_sensors].pin = atoi(s_pin);
+                        sensor_list[num_sensors].invert = atoi(s_invert);
+                        
+                        if ( debug ) {
+                            syslog(LOG_INFO, "Sensor %d: %s @ pin %d,%sinverted",
+                                   num_sensors,
+                                   sensor_list[num_sensors].label,
+                                   sensor_list[num_sensors].pin,
+                                   (sensor_list[num_sensors].invert ? " " : " not ")
+                                   );
+                        }
                         num_sensors++;
                     }
                 }
