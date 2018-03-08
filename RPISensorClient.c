@@ -221,8 +221,11 @@ uint8_t readConfig(void) {
                 }
                 
                 syslog(LOG_INFO, "line: %s", line);
+
+                if ( *cursor != '#') {                          /* skip '#' comments   */
+                    syslog(LOG_INFO, "line: %s", line);
+                }
             }
-    
             free(line);
             n=0;
             length = getline(&line, &n, fp);
