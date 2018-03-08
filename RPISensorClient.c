@@ -221,7 +221,13 @@ uint8_t readConfig(void) {
                 }
                 
                 if ( *cursor != '#') {                          /* skip '#' comments   */
-                    syslog(LOG_INFO, "line: %s", line);
+                    syslog(LOG_INFO, "IN: %s", line);
+
+                    char *token=cursor;
+                    while (*cursor && *cursor != ' ') cursor++;          /* skip token */
+                    *cursor = '\0';                                    /* end of token */
+
+                    syslog(LOG_INFO, "  Token: %s", token);
                 }
             }
             free(line);
@@ -230,6 +236,7 @@ uint8_t readConfig(void) {
         }
         fclose(fp);
     }
+    return (num_sensors);
 }
 
 #ifdef XXXX
