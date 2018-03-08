@@ -62,6 +62,13 @@
 
 /*
  * ---------------------------------------------------------------------------------------
+ * Value a sensor would never report
+ * ---------------------------------------------------------------------------------------
+ */
+#define RESET_VALUE   100
+
+/*
+ * ---------------------------------------------------------------------------------------
  * Some globals we can't do without... ;)
  * ---------------------------------------------------------------------------------------
  */
@@ -257,6 +264,8 @@ uint8_t readConfig(void) {
                         while (*cursor && *cursor == ' ') cursor++; /*    skip spaces */
                         sensor_list[num_sensors].label = strdup(cursor);
                         
+                        sensor_list[num_sensors].value = RESET_VALUE;
+                        
                         if ( debug ) {
                             syslog(LOG_INFO, "Sensor %d: %s @ pin %d,%sinverted",
                                    num_sensors,
@@ -447,7 +456,7 @@ int main(int argc, char *argv[]) {
             syslog(LOG_INFO,"Trigger full report");
             uint8_t index=0;
             while ( sensor_list[index].label ) {
-                sensor_list[index].value++;
+                sensor_list[index].value = RESET_VALUE;
                 index++;
             }
         }
