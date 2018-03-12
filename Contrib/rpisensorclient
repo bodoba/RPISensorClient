@@ -19,20 +19,22 @@
 # along with ReadDHT11.  If not, see <http://www.gnu.org/licenses/>.
 # *********************************************************************************** *
 ### BEGIN INIT INFO
-# Provides:             mqttactiond
+# Provides:             prisensorclient
 # Required-Start:       $local_fs $remote_fs
 # Required-Stop:        $local_fs $remote_fs
 # Default-Start:        2 3 4 5
 # Default-Stop:         0 1 6
-# Short-Description:    MQTT action daemon
+# Short-Description:    Send sensor information to MQTT broker
 ### END INIT INFO
 
 BIN=/usr/sbin/rpisensorclient
+CFG=/etc/rpisensorclient.cfg
+
 make in
 case "$1" in
 'start')
   echo "Starting sensor client..."
-  $BIN
+  $BIN -c $CFG
   RETVAL=$?
 ;;
 
