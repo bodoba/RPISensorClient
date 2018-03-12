@@ -29,6 +29,7 @@
 
 BIN=/usr/sbin/rpisensorclient
 CFG=/etc/rpisensorclient.cfg
+PID=/var/run/RPISensorClient.pid
 
 make in
 case "$1" in
