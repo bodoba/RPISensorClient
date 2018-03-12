@@ -17,5 +17,5 @@
 # along with ReadDHT11.  If not, see <http://www.gnu.org/licenses/>.
 # *********************************************************************************** *
 
-INSTALL(FILES rpisensorclient      DESTINATION etc/init.d)
+INSTALL(PROGRAMS rpisensorclient      DESTINATION etc/init.d)
 INSTALL(FILES rpisensorclient.cfg  DESTINATION etc)
