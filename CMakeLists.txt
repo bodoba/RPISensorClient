@@ -24,7 +24,7 @@ project (RPISensorClient)
 find_library(LIB_MQTT mosquitto)
 find_library(LIB_WIRING wiringPi)
 
-set(CMAKE_C_FLAGqS "-Wall -std=gnu11 -g")
+set(CMAKE_C_FLAGS "-Wall -std=gnu11 -g")
 set(CMAKE_INSTALL_PREFIX /)
 
 # all executables end up in bin
