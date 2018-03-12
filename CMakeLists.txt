@@ -36,6 +36,6 @@ add_executable(rpisensorclient RPISensorClient.c MQTT.c)
 target_link_libraries(rpisensorclient "${LIB_MQTT}")
 target_link_libraries(rpisensorclient "${LIB_WIRING}")
 
-INSTALL(FILES bin/rpisensorclient DESTINATION usr/sbin)
+INSTALL(PROGRAMS bin/rpisensorclient DESTINATION usr/sbin)
 
 add_subdirectory(Contrib)
