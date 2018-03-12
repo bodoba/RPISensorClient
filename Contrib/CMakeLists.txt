@@ -18,3 +18,4 @@
 # *********************************************************************************** *
 
 INSTALL(FILES rpisensorclient      DESTINATION etc/init.d)
+INSTALL(FILES rpisensorclient.cfg  DESTINATION etc)
