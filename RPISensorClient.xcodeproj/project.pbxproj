@@ -8,6 +8,7 @@
 
 /* Begin PBXFileReference section */
 		212755DA1FE85E990080A314 /* Contrib */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Contrib; sourceTree = "<group>"; };
+		213A1D8A2059E60A0059F376 /* License.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = License.txt; sourceTree = "<group>"; };
 		218060471FC761F0001E91A4 /* mk */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = mk; sourceTree = "<group>"; };
 		218060481FC761FE001E91A4 /* CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		218060491FC78D1C001E91A4 /* MQTT.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = MQTT.c; sourceTree = "<group>"; };
@@ -19,6 +20,7 @@
 		2180603C1FC761BF001E91A4 = {
 			isa = PBXGroup;
 			children = (
+				213A1D8A2059E60A0059F376 /* License.txt */,
 				212755DA1FE85E990080A314 /* Contrib */,
 				218060471FC761F0001E91A4 /* mk */,
 				218060481FC761FE001E91A4 /* CMakeLists.txt */,
