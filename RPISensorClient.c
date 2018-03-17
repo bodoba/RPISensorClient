@@ -325,7 +325,7 @@ int main(int argc, char *argv[]) {
         exit(EXIT_FAILURE);
     }
     
-    if ( debug ) {
+    if (debug) {
         syslog(LOG_INFO, "MQTT broker IP: %s",   mqtt_broker_ip);
         syslog(LOG_INFO, "MQTT broker port: %d", mqtt_broker_port);
         syslog(LOG_INFO, "MQTT interface: %s",   mqtt_interface);
@@ -451,9 +451,11 @@ int main(int argc, char *argv[]) {
         if ( countdown > 0 ) {
             countdown--;
         } else {
+            if (debug) {
+                syslog(LOG_INFO,"Trigger full report");
+            }
             countdown = report_cycle;
             // change value to enforce report of actual value
-            syslog(LOG_INFO,"Trigger full report");
             uint8_t index=0;
             while ( sensor_list[index].label ) {
                 sensor_list[index].value = RESET_VALUE;
