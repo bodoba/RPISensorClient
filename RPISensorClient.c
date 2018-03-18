@@ -292,7 +292,7 @@ uint8_t readConfig(void) {
                         sensor_list[num_sensors].value = RESET_VALUE;
                         
                         if ( debug ) {
-                            syslog(LOG_INFO, "Sensor %d: %s(%s) @ pin %d,%sinverted, read every %d uSecs",
+                            syslog(LOG_INFO, "%02d: %s sensor '%s' @ pin %d,%sinverted, read every %d uSecs",
                                    num_sensors,
                                    (sensor_list[num_sensors].type == DIGITAL) ? "Digital" : "DHT11",
                                    sensor_list[num_sensors].label,
