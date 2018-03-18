@@ -201,9 +201,17 @@ void readSensor(char* id, int pin, char* name, bool invert, uint8_t* old_value) 
     }
 }
 
+
+
 /* *********************************************************************************** */
 /* read config file                                                                    */
 /* *********************************************************************************** */
+void next_value( **char cursor) {
+    while (**cursor && **cursor != ' ') *cursor++;        /*   skip token */
+    **cursor = '\0'; *cursor++;                           /* end of token */
+    while (**cursor && **cursor == ' ') *cursor++;        /* skip spaces  */
+}
+
 uint8_t readConfig(void) {
     FILE *fp = NULL;
     fp = fopen(configFile, "rb");
@@ -228,9 +236,11 @@ uint8_t readConfig(void) {
                 
                 if ( *cursor != '#') {                          /* skip '#' comments   */
                     char *token=cursor;
+
                     while (*cursor && *cursor != ' ') cursor++;        /*   skip token */
                     *cursor = '\0'; cursor++;                          /* end of token */
                     while (*cursor && *cursor == ' ') cursor++;        /* skip spaces  */
+
                     char *value=cursor;
 
                     if (!strcmp(token, "MQTT_BROKER_IP")) {
@@ -256,6 +266,7 @@ uint8_t readConfig(void) {
                         char *s_pin=NULL, *s_type=NULL, *s_invert=NULL, *s_freq=NULL;
 
                         s_pin = cursor;
+
                         while (*cursor && *cursor != ' ') cursor++;   /*   skip value */
                         *cursor = '\0'; cursor++;                     /* end of value */
                         while (*cursor && *cursor == ' ') cursor++;   /*  skip spaces */
