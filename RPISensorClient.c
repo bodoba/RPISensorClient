@@ -262,7 +262,7 @@ uint8_t readConfig(void) {
                         sensor_list[num_sensors].pin    = atoi(cursor);
                         char *s_type                    = nextValue(&cursor);
                         sensor_list[num_sensors].invert = atoi(nextValue(&cursor));
-                        sensor_list[num_sensors].freq   = atoi((nextValue(&cursor));
+                        sensor_list[num_sensors].freq   = atoi(nextValue(&cursor));
                         sensor_list[num_sensors].label  = strdup(nextValue(&cursor));
 
                         if (!strcmp(s_type, "DIGITAL")) {
