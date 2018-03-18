@@ -47,7 +47,6 @@
 #define MQTT_BROKER_PORT  1883
 #define MQTT_KEEPALIVE    60
 #define PID_FILE          "/var/run/RPISensorClient.pid"
-#define CYCLE_TIME        1
 #define REPORT_CYCLE      300
 #define MQTT_INTERFACE    "eth0"
 #define DEBUG             0
@@ -84,7 +83,6 @@ int     mqtt_broker_port = MQTT_BROKER_PORT;
 int     mqtt_keepalive   = MQTT_KEEPALIVE;
 char*   mqtt_interface   = MQTT_INTERFACE;
 int     report_cycle     = REPORT_CYCLE;
-int     cycle_time       = CYCLE_TIME;
 
 /*
  * ---------------------------------------------------------------------------------------
@@ -100,6 +98,7 @@ typedef struct {
     char          *label;
     bool          invert;
     uint8_t       value;
+    uint64_t      last_read;
 } sensor_t;
 
 sensor_t sensor_list[MAX_SENSORS];
@@ -220,9 +219,9 @@ uint64_t current_timestamp() {
 /* read config file                                                                    */
 /* *********************************************************************************** */
 char *nextValue( char **cursor) {
-    while (**cursor && **cursor != ' ') (*cursor)++;        /*   skip token */
-    **cursor = '\0'; (*cursor)++;                           /* end of token */
-    while (**cursor && **cursor == ' ') (*cursor)++;        /* skip spaces  */
+    while (**cursor && **cursor != ' ') (*cursor)++;                   /*   skip token */
+    **cursor = '\0'; (*cursor)++;                                      /* end of token */
+    while (**cursor && **cursor == ' ') (*cursor)++;                   /* skip spaces  */
     return *cursor;
 }
 
@@ -262,8 +261,6 @@ uint8_t readConfig(void) {
                         mqtt_interface = strdup(value);
                     } else if (!strcmp(token, "MQTT_KEEPALIVE")) {
                         mqtt_keepalive = atoi(value);
-                    } else if (!strcmp(token, "CYCLE_TIME")) {
-                        cycle_time = atoi(value);
                     } else if (!strcmp(token, "DEBUG")) {
                         debug = atoi(value);
                     } else if (!strcmp(token, "REPORT_CYCLE")) {
@@ -290,8 +287,9 @@ uint8_t readConfig(void) {
                             sensor_list[num_sensors].type = DIGITAL;
                         }
                         
-                        // initialize sensro readign with invalid value
-                        sensor_list[num_sensors].value = RESET_VALUE;
+                        // initialize sensor readign with invalid value
+                        sensor_list[num_sensors].value     = RESET_VALUE;
+                        sensor_list[num_sensors].last_read = (uint64_t)0;
                         
                         if ( debug ) {
                             syslog(LOG_INFO, "%02d: %s sensor '%s' @ pin %d,%sinverted, read every %d uSecs",
@@ -354,14 +352,13 @@ int main(int argc, char *argv[]) {
     }
     
     if (debug) {
-        syslog(LOG_INFO, "MQTT broker IP: %s",   mqtt_broker_ip);
-        syslog(LOG_INFO, "MQTT broker port: %d", mqtt_broker_port);
-        syslog(LOG_INFO, "MQTT interface: %s",   mqtt_interface);
-        syslog(LOG_INFO, "MQTT keepalive: %d",   mqtt_keepalive);
-        syslog(LOG_INFO, "PREFIX: %s",           prefix);
-        syslog(LOG_INFO, "Cycle time: %d", cycle_time);
-        syslog(LOG_INFO, "Report Cycle: %d",     report_cycle);
-        syslog(LOG_INFO, "pid/lock file: %s",    pidfile);
+        syslog(LOG_INFO, "MQTT broker IP: %s",           mqtt_broker_ip);
+        syslog(LOG_INFO, "MQTT broker port: %d",         mqtt_broker_port);
+        syslog(LOG_INFO, "MQTT interface: %s",           mqtt_interface);
+        syslog(LOG_INFO, "MQTT keepalive: %d",           mqtt_keepalive);
+        syslog(LOG_INFO, "PREFIX: %s",                   prefix);
+        syslog(LOG_INFO, "Full report every %d seconds", report_cycle);
+        syslog(LOG_INFO, "pid/lock file: %s",            pidfile);
     }
     
     /* ------------------------------------------------------------------------------- */
@@ -463,35 +460,31 @@ int main(int argc, char *argv[]) {
     /* ------------------------------------------------------------------------------- */
     syslog(LOG_INFO, "Startup successfull" );
     
-    uint32_t countdown = report_cycle;
-
+    uint64_t last_full_report = (uint64_t)0;
+    bool     force_reading    = true;
+    
     for ( ;; ) {
-        uint8_t index=0;
+        uint64_t now   = current_timestamp();
+        uint8_t  index = 0;
+        
         while ( sensor_list[index].label ) {
-            readSensor(id,
-                    sensor_list[index].pin,
-                    sensor_list[index].label,
-                    sensor_list[index].invert,
-                    &sensor_list[index].value);
+            if ( (sensor_list[index].freq + sensor_list[index].last_read <= now) || force_reading ) {
+                // time's up read sensor value
+                if ( force_reading ) {
+                    sensor_list[index].value = RESET_VALUE;
+                }
+                readSensor(id,
+                           sensor_list[index].pin,
+                           sensor_list[index].label,
+                           sensor_list[index].invert,
+                           &sensor_list[index].value);
+            }
+            sensor_list[index].last_read = now;
             index++;
         }
-        
-        if ( countdown > 0 ) {
-            countdown--;
-        } else {
-            if (debug) {
-                syslog(LOG_INFO,"Trigger full report");
-            }
-            countdown = report_cycle;
-            // change value to enforce report of actual value
-            uint8_t index=0;
-            while ( sensor_list[index].label ) {
-                sensor_list[index].value = RESET_VALUE;
-                index++;
-            }
-        }
-        sleep(cycle_time);
+        force_reading = false;
     }
+    
     /* ------------------------------------------------------------------------------- */
     /* finish up                                                                       */
     /* ------------------------------------------------------------------------------- */
