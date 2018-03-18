@@ -36,8 +36,9 @@
 
 #include <wiringPi.h>
 #include "MQTT.h"
+#include <sys/time.h>
 
-/* 
+/*
  * ---------------------------------------------------------------------------------------
  * Default settings - may be overwritten by config file values
  * ---------------------------------------------------------------------------------------
@@ -201,6 +202,18 @@ void readSensor(char* id, int pin, char* name, bool invert, uint8_t* old_value) 
     }
 }
 
+
+/*
+ * ---------------------------------------------------------------------------------------
+ * Get surrent time in milliseconds
+ * ---------------------------------------------------------------------------------------
+ */
+uint64_t current_timestamp() {
+    struct timeval te;
+    gettimeofday(&te, NULL);                                    // get current time
+    uint64_t milliseconds = te.tv_sec*1000LL + te.tv_usec/1000; // calculate milliseconds
+    return milliseconds;
+}
 
 
 /* *********************************************************************************** */
