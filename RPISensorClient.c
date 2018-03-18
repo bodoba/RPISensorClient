@@ -236,13 +236,8 @@ uint8_t readConfig(void) {
                 }
                 
                 if ( *cursor != '#') {                          /* skip '#' comments   */
-                    char *token=cursor;
-
+                    char *token = cursor;
                     char *value = nextValue(&cursor);
-//                    while (*cursor && *cursor != ' ') cursor++;        /*   skip token */
-//                    *cursor = '\0'; cursor++;                          /* end of token */
-//                    while (*cursor && *cursor == ' ') cursor++;        /* skip spaces  */
-//                     char *value=cursor;
 
                     if (!strcmp(token, "MQTT_BROKER_IP")) {
                         mqtt_broker_ip = strdup(value);
@@ -268,25 +263,15 @@ uint8_t readConfig(void) {
 
                         s_pin = cursor;
 
-                        while (*cursor && *cursor != ' ') cursor++;   /*   skip value */
-                        *cursor = '\0'; cursor++;                     /* end of value */
-                        while (*cursor && *cursor == ' ') cursor++;   /*  skip spaces */
+//                        while (*cursor && *cursor != ' ') cursor++;   /*   skip value */
+//                        *cursor = '\0'; cursor++;                     /* end of value */
+//                        while (*cursor && *cursor == ' ') cursor++;   /*  skip spaces */
+                        //                        s_type = cursor;
+                        s_type   = nextValue(&cursor);
+                        s_invert = nextValue(&cursor);
+                        s_freq   = nextValue(&cursor);
+                        sensor_list[num_sensors].label = strdup(nextValue(&cursor));
 
-                        s_type = cursor;
-                        while (*cursor && *cursor != ' ') cursor++;   /*   skip value */
-                        *cursor = '\0'; cursor++;                     /* end of value */
-                        while (*cursor && *cursor == ' ') cursor++;   /*  skip spaces */
-
-                        s_invert = cursor;
-                        while (*cursor && *cursor != ' ') cursor++;   /*   skip value */
-                        *cursor = '\0'; cursor++;                     /* end of value */
-                        while (*cursor && *cursor == ' ') cursor++;   /*  skip spaces */
-
-                        s_freq = cursor;
-                        while (*cursor && *cursor != ' ') cursor++;   /*   skip value */
-                        *cursor = '\0'; cursor++;                     /* end of value */
-                        while (*cursor && *cursor == ' ') cursor++;   /*  skip spaces */
-                        
                         sensor_list[num_sensors].pin    = atoi(s_pin);
                         sensor_list[num_sensors].freq   = atoi(s_freq);
                         sensor_list[num_sensors].invert = atoi(s_invert);
@@ -300,7 +285,6 @@ uint8_t readConfig(void) {
                             sensor_list[num_sensors].type = DIGITAL;
                         }
                         
-                        sensor_list[num_sensors].label = strdup(cursor);
                         sensor_list[num_sensors].value = RESET_VALUE;
                         
                         if ( debug ) {
