@@ -207,9 +207,9 @@ void readSensor(char* id, int pin, char* name, bool invert, uint8_t* old_value) 
 /* read config file                                                                    */
 /* *********************************************************************************** */
 char *nextValue( char **cursor) {
-    while (**cursor && **cursor != ' ') *cursor++;        /*   skip token */
-    **cursor = '\0'; *cursor++;                           /* end of token */
-    while (**cursor && **cursor == ' ') *cursor++;        /* skip spaces  */
+    while (**cursor && **cursor != ' ') (*cursor)++;        /*   skip token */
+    **cursor = '\0'; (*cursor)++;                           /* end of token */
+    while (**cursor && **cursor == ' ') (*cursor)++;        /* skip spaces  */
     return *cursor;
 }
 
@@ -238,7 +238,7 @@ uint8_t readConfig(void) {
                 if ( *cursor != '#') {                          /* skip '#' comments   */
                     char *token=cursor;
 
-                    *value = nextValue (&cursor);
+                    char *value = nextValue(&cursor);
 //                    while (*cursor && *cursor != ' ') cursor++;        /*   skip token */
 //                    *cursor = '\0'; cursor++;                          /* end of token */
 //                    while (*cursor && *cursor == ' ') cursor++;        /* skip spaces  */
