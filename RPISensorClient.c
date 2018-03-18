@@ -298,7 +298,7 @@ uint8_t readConfig(void) {
                                    sensor_list[num_sensors].label,
                                    sensor_list[num_sensors].pin,
                                    (sensor_list[num_sensors].invert ? " " : " not "),
-                                   sensor_list[num_sensors].freq,
+                                   sensor_list[num_sensors].freq
                                    );
                         }
                         num_sensors++;
