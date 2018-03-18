@@ -467,17 +467,24 @@ int main(int argc, char *argv[]) {
         uint64_t now   = current_timestamp();
         uint8_t  index = 0;
         
+        if ( (last_full_report + (report_cycle*1000)) <= now ) {
+            if (debug) {
+                syslog(LOG_INFO, "Send full report");
+            }
+            force_reading    = true;
+            last_full_report = now;
+        }
+        
         while ( sensor_list[index].label ) {
-            if ( (sensor_list[index].freq + sensor_list[index].last_read <= now) || force_reading ) {
+            if (((sensor_list[index].freq + sensor_list[index].last_read) <= now) || force_reading) {
                 // time's up read sensor value
                 if ( force_reading ) {
                     sensor_list[index].value = RESET_VALUE;
                 }
-                readSensor(id,
-                           sensor_list[index].pin,
-                           sensor_list[index].label,
-                           sensor_list[index].invert,
-                           &sensor_list[index].value);
+                readSensor(id, sensor_list[index].pin,
+                               sensor_list[index].label,
+                               sensor_list[index].invert,
+                               &sensor_list[index].value);
             }
             sensor_list[index].last_read = now;
             index++;
