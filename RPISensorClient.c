@@ -206,7 +206,7 @@ void readSensor(char* id, int pin, char* name, bool invert, uint8_t* old_value) 
 /* *********************************************************************************** */
 /* read config file                                                                    */
 /* *********************************************************************************** */
-cha *nextValue( char **cursor) {
+char *nextValue( char **cursor) {
     while (**cursor && **cursor != ' ') *cursor++;        /*   skip token */
     **cursor = '\0'; *cursor++;                           /* end of token */
     while (**cursor && **cursor == ' ') *cursor++;        /* skip spaces  */
@@ -238,12 +238,11 @@ uint8_t readConfig(void) {
                 if ( *cursor != '#') {                          /* skip '#' comments   */
                     char *token=cursor;
 
-                    nextValue (&cursor);
+                    *value = nextValue (&cursor);
 //                    while (*cursor && *cursor != ' ') cursor++;        /*   skip token */
 //                    *cursor = '\0'; cursor++;                          /* end of token */
 //                    while (*cursor && *cursor == ' ') cursor++;        /* skip spaces  */
-
-                    char *value=cursor;
+//                     char *value=cursor;
 
                     if (!strcmp(token, "MQTT_BROKER_IP")) {
                         mqtt_broker_ip = strdup(value);
