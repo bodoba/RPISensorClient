@@ -95,7 +95,7 @@ typedef enum { DIGITAL, DHT11 } sensorType_t;
 typedef struct {
     uint8_t       pin;
     sensorType_t  type;
-    uint16_t      frequency;
+    uint16_t      freq;
     char          *label;
     bool          invert;
     uint8_t       value;
