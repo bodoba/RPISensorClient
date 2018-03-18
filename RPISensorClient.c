@@ -252,22 +252,43 @@ uint8_t readConfig(void) {
                     } else if (!strcmp(token, "PID_FILE")) {
                         pidfile = strdup(value);
                     } else if (!strcmp(token, "SENSOR")) {
-                        char *s_pin, *s_invert;
+                        // Read: Pin Type Invert Frequency Label
+                        char *s_pin, *s_type, *s_invert, *s_freq;
 
-                        s_pin = value;
-                        while (*cursor && *cursor != ' ') cursor++; /* skip pin value */
-                        *cursor = '\0'; cursor++;                   /*     end of pin */
-                        sensor_list[num_sensors].pin = atoi(s_pin);
-                        
-                        while (*cursor && *cursor == ' ') cursor++; /*    skip spaces */
+                        s_pin = cursor;
+                        while (*cursor && *cursor != ' ') cursor++;   /*   skip value */
+                        *cursor = '\0'; cursor++;                     /* end of value */
+                        while (*cursor && *cursor == ' ') cursor++;   /*  skip spaces */
+
+                        s_type = cursor;
+                        while (*cursor && *cursor != ' ') cursor++;   /*   skip value */
+                        *cursor = '\0'; cursor++;                     /* end of value */
+                        while (*cursor && *cursor == ' ') cursor++;   /*  skip spaces */
+
                         s_invert = cursor;
-                        while (*cursor && *cursor != ' ') cursor++; /* skip pin value */
-                        *cursor = '\0'; cursor++;                   /*     end of pin */
+                        while (*cursor && *cursor != ' ') cursor++;   /*   skip value */
+                        *cursor = '\0'; cursor++;                     /* end of value */
+                        while (*cursor && *cursor == ' ') cursor++;   /*  skip spaces */
+
+                        s_freq = cursor;
+                        while (*cursor && *cursor != ' ') cursor++;   /*   skip value */
+                        *cursor = '\0'; cursor++;                     /* end of value */
+                        while (*cursor && *cursor == ' ') cursor++;   /*  skip spaces */
+                        
+                        sensor_list[num_sensors].pin    = atoi(s_pin);
+                        sensor_list[num_sensors].freq   = atoi(s_freq);
                         sensor_list[num_sensors].invert = atoi(s_invert);
 
-                        while (*cursor && *cursor == ' ') cursor++; /*    skip spaces */
-                        sensor_list[num_sensors].label = strdup(cursor);
+                        if (!strcmp(s_type, "DIGITAL")) {
+                            sensor_list[num_sensors].invert = DIGITAL;
+                        } else if (!strcmp(s_type, "DHT11")) {
+                            sensor_list[num_sensors].invert = DHT11;
+                        } else {
+                            syslog(LOG_WARNING, "Warning: Unknown sensor type '%s'. Fall back to DIGITAL", s_type);
+                            sensor_list[num_sensors].invert = DIGITAL;
+                        }
                         
+                        sensor_list[num_sensors].label = strdup(cursor);
                         sensor_list[num_sensors].value = RESET_VALUE;
                         
                         if ( debug ) {
