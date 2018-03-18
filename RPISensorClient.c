@@ -72,17 +72,17 @@
  * Some globals we can't do without... ;)
  * ---------------------------------------------------------------------------------------
  */
-int     pidFilehandle    = 0;
-bool    deamon           = true;
-bool    debug            = DEBUG;
-char    *prefix          = PREFIX;
-char    *pidfile         = PID_FILE;
-char    *configFile      = CONFIG_FILE;
-char    *mqtt_broker_ip  = MQTT_BROKER_IP;
-int     mqtt_broker_port = MQTT_BROKER_PORT;
-int     mqtt_keepalive   = MQTT_KEEPALIVE;
-char*   mqtt_interface   = MQTT_INTERFACE;
-int     report_cycle     = REPORT_CYCLE;
+int      pidFilehandle    = 0;
+bool     deamon           = true;
+bool     debug            = DEBUG;
+char     *prefix          = PREFIX;
+char     *pidfile         = PID_FILE;
+char     *configFile      = CONFIG_FILE;
+char     *mqtt_broker_ip  = MQTT_BROKER_IP;
+int      mqtt_broker_port = MQTT_BROKER_PORT;
+int      mqtt_keepalive   = MQTT_KEEPALIVE;
+char*    mqtt_interface   = MQTT_INTERFACE;
+uint64_t report_cycle     = REPORT_CYCLE;
 
 /*
  * ---------------------------------------------------------------------------------------
@@ -98,7 +98,7 @@ typedef struct {
     char          *label;
     bool          invert;
     uint8_t       value;
-    uint64_t      last_read;
+    uint64_t      next_read;
 } sensor_t;
 
 sensor_t sensor_list[MAX_SENSORS];
@@ -264,7 +264,7 @@ uint8_t readConfig(void) {
                     } else if (!strcmp(token, "DEBUG")) {
                         debug = atoi(value);
                     } else if (!strcmp(token, "REPORT_CYCLE")) {
-                        report_cycle = atoi(value);
+                        report_cycle = atoi(value) * 1000;
                     } else if (!strcmp(token, "PID_FILE")) {
                         pidfile = strdup(value);
                     } else if (!strcmp(token, "SENSOR")) {
@@ -289,7 +289,7 @@ uint8_t readConfig(void) {
                         
                         // initialize sensor readign with invalid value
                         sensor_list[num_sensors].value     = RESET_VALUE;
-                        sensor_list[num_sensors].last_read = (uint64_t)0;
+                        sensor_list[num_sensors].next_read = (uint64_t)0;
                         
                         if ( debug ) {
                             syslog(LOG_INFO, "%02d: %s sensor '%s' @ pin %d,%sinverted, read every %d uSecs",
@@ -464,32 +464,40 @@ int main(int argc, char *argv[]) {
     bool     force_reading    = true;
     
     for ( ;; ) {
-        uint64_t now   = current_timestamp();
-        uint8_t  index = 0;
+        uint64_t now       = current_timestamp();
+        uint64_t next_time = last_full_report+report_cycle;
+        uint8_t  index     = 0;
         
-        if ( (last_full_report + (report_cycle*1000)) <= now ) {
+        // time to send a full report?
+        if ( next_time <= now ) {
             if (debug) {
                 syslog(LOG_INFO, "Send full report");
             }
             force_reading    = true;
             last_full_report = now;
+            next_time        = now + report_cycle;
         }
         
+        // step through sensors an check if their time is up
         while ( sensor_list[index].label ) {
-            if (((sensor_list[index].freq + sensor_list[index].last_read) <= now) || force_reading) {
-                // time's up read sensor value
-                if ( force_reading ) {
+            if ((sensor_list[index].next_read) <= now) || force_reading) {
+                // time's up, read sensor value!
+                if (force_reading) {
                     sensor_list[index].value = RESET_VALUE;
                 }
                 readSensor(id, sensor_list[index].pin,
                                sensor_list[index].label,
                                sensor_list[index].invert,
                                &sensor_list[index].value);
+                sensor_list[index].next_read = now + sensor_list[index].freq;
+                if (sensor_list[index].next_read < next_time) {
+                    next_time = sensor_list[index].next_read;
+                }
             }
-            sensor_list[index].last_read = now;
             index++;
         }
         force_reading = false;
+        usleep((next_time-now)*100);
     }
     
     /* ------------------------------------------------------------------------------- */
