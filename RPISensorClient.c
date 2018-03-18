@@ -90,10 +90,14 @@ int     cycle_time       = CYCLE_TIME;
  * sensor specific data
  * ---------------------------------------------------------------------------------------
  */
+typedef enum { DIGITAL, DHT11 } sensor_t;
+
 typedef struct {
-    uint8_t pin;
-    char    *label;
-    bool    invert;
+    uint8_t  pin;
+    sensor_t type;
+    uin16_t  frequency;
+    char     *label;
+    bool     invert;
     uint8_t value;
 } sensor_t;
 
