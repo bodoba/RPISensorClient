@@ -259,22 +259,11 @@ uint8_t readConfig(void) {
                         pidfile = strdup(value);
                     } else if (!strcmp(token, "SENSOR")) {
                         // Read: Pin Type Invert Frequency Label
-                        char *s_pin=NULL, *s_type=NULL, *s_invert=NULL, *s_freq=NULL;
-
-                        s_pin = cursor;
-
-//                        while (*cursor && *cursor != ' ') cursor++;   /*   skip value */
-//                        *cursor = '\0'; cursor++;                     /* end of value */
-//                        while (*cursor && *cursor == ' ') cursor++;   /*  skip spaces */
-                        //                        s_type = cursor;
-                        s_type   = nextValue(&cursor);
-                        s_invert = nextValue(&cursor);
-                        s_freq   = nextValue(&cursor);
-                        sensor_list[num_sensors].label = strdup(nextValue(&cursor));
-
-                        sensor_list[num_sensors].pin    = atoi(s_pin);
-                        sensor_list[num_sensors].freq   = atoi(s_freq);
-                        sensor_list[num_sensors].invert = atoi(s_invert);
+                        sensor_list[num_sensors].pin    = atoi(cursor);
+                        char *s_type                    = nextValue(&cursor);
+                        sensor_list[num_sensors].invert = atoi(nextValue(&cursor));
+                        sensor_list[num_sensors].freq   = atoi((nextValue(&cursor));
+                        sensor_list[num_sensors].label  = strdup(nextValue(&cursor));
 
                         if (!strcmp(s_type, "DIGITAL")) {
                             sensor_list[num_sensors].type = DIGITAL;
