@@ -253,7 +253,7 @@ uint8_t readConfig(void) {
                         pidfile = strdup(value);
                     } else if (!strcmp(token, "SENSOR")) {
                         // Read: Pin Type Invert Frequency Label
-                        char *s_pin, *s_type, *s_invert, *s_freq;
+                        char *s_pin=NULL, *s_type=NULL, *s_invert=NULL, *s_freq=NULL;
 
                         s_pin = cursor;
                         while (*cursor && *cursor != ' ') cursor++;   /*   skip value */
@@ -280,12 +280,12 @@ uint8_t readConfig(void) {
                         sensor_list[num_sensors].invert = atoi(s_invert);
 
                         if (!strcmp(s_type, "DIGITAL")) {
-                            sensor_list[num_sensors].invert = DIGITAL;
+                            sensor_list[num_sensors].type = DIGITAL;
                         } else if (!strcmp(s_type, "DHT11")) {
-                            sensor_list[num_sensors].invert = DHT11;
+                            sensor_list[num_sensors].type = DHT11;
                         } else {
                             syslog(LOG_WARNING, "Warning: Unknown sensor type '%s'. Fall back to DIGITAL", s_type);
-                            sensor_list[num_sensors].invert = DIGITAL;
+                            sensor_list[num_sensors].type = DIGITAL;
                         }
                         
                         sensor_list[num_sensors].label = strdup(cursor);
