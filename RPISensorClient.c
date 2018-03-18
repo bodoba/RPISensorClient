@@ -90,7 +90,7 @@ int     cycle_time       = CYCLE_TIME;
  * sensor specific data
  * ---------------------------------------------------------------------------------------
  */
-typedef enum { DIGITAL, DHT11 } sensorType_t;
+typedef enum { DIGITAL, DHT11_TMP, DHT11_HMD } sensorType_t;
 
 typedef struct {
     uint8_t       pin;
@@ -260,26 +260,31 @@ uint8_t readConfig(void) {
                     } else if (!strcmp(token, "SENSOR")) {
                         // Read: Pin Type Invert Frequency Label
                         sensor_list[num_sensors].pin    = atoi(cursor);
-                        char *s_type                    = nextValue(&cursor);
+                        char *s_type                    = nextValue(&cursor); // need special handling
                         sensor_list[num_sensors].invert = atoi(nextValue(&cursor));
                         sensor_list[num_sensors].freq   = atoi(nextValue(&cursor));
                         sensor_list[num_sensors].label  = strdup(nextValue(&cursor));
 
+                        // convert type string to enum
                         if (!strcmp(s_type, "DIGITAL")) {
                             sensor_list[num_sensors].type = DIGITAL;
-                        } else if (!strcmp(s_type, "DHT11")) {
-                            sensor_list[num_sensors].type = DHT11;
+                        } else if (!strcmp(s_type, "DHT11_TMP")) {
+                            sensor_list[num_sensors].type = DHT11_TMP;
+                        } else if (!strcmp(s_type, "DHT11_HMD")) {
+                            sensor_list[num_sensors].type = DHT11_HMD;
                         } else {
                             syslog(LOG_WARNING, "Warning: Unknown sensor type '%s'. Fall back to DIGITAL", s_type);
                             sensor_list[num_sensors].type = DIGITAL;
                         }
                         
+                        // initialize sensro readign with invalid value
                         sensor_list[num_sensors].value = RESET_VALUE;
                         
                         if ( debug ) {
                             syslog(LOG_INFO, "%02d: %s sensor '%s' @ pin %d,%sinverted, read every %d uSecs",
                                    num_sensors,
-                                   (sensor_list[num_sensors].type == DIGITAL) ? "Digital" : "DHT11",
+                                   (sensor_list[num_sensors].type == DIGITAL)   ? "Digital"   :
+                                   (sensor_list[num_sensors].type == DHT11_TMP) ? "DHT11_TMP" :"DHT11_HMD",
                                    sensor_list[num_sensors].label,
                                    sensor_list[num_sensors].pin,
                                    (sensor_list[num_sensors].invert ? " " : " not "),
@@ -296,11 +301,9 @@ uint8_t readConfig(void) {
         }
         fclose(fp);
     }
-    
     sensor_list[num_sensors].label  = NULL;
     sensor_list[num_sensors].pin    = 0;
     sensor_list[num_sensors].invert = 0;
-
     return (num_sensors);
 }
 
