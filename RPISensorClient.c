@@ -357,7 +357,7 @@ int main(int argc, char *argv[]) {
         syslog(LOG_INFO, "MQTT interface: %s",           mqtt_interface);
         syslog(LOG_INFO, "MQTT keepalive: %d",           mqtt_keepalive);
         syslog(LOG_INFO, "PREFIX: %s",                   prefix);
-        syslog(LOG_INFO, "Full report every %ld seconds", report_cycle);
+        syslog(LOG_INFO, "Full report every %llu seconds", report_cycle);
         syslog(LOG_INFO, "pid/lock file: %s",            pidfile);
     }
     
@@ -509,7 +509,7 @@ int main(int argc, char *argv[]) {
         }
         force_reading = false;
 //        usleep(next_time-now);
-        usleep(1000);
+        usleep((useconds_t)1000);
 
     }
     
