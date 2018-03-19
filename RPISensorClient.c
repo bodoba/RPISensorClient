@@ -509,7 +509,7 @@ int main(int argc, char *argv[]) {
         }
         force_reading = false;
 //        usleep(next_time-now);
-        sleep(1);
+        usleep(1000);
     }
     
     /* ------------------------------------------------------------------------------- */
