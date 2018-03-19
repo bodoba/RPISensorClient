@@ -292,7 +292,7 @@ uint8_t readConfig(void) {
                         sensor_list[num_sensors].next_read = (uint64_t)0;
                         
                         if ( debug ) {
-                            syslog(LOG_INFO, "%02d: %s sensor '%s' @ pin %d,%sinverted, read every %lu uSecs",
+                            syslog(LOG_INFO, "%02d: %s sensor '%s' @ pin %d,%sinverted, read every %u uSecs",
                                    num_sensors,
                                    (sensor_list[num_sensors].type == DIGITAL)   ? "Digital"   :
                                    (sensor_list[num_sensors].type == DHT11_TMP) ? "DHT11_TMP" :"DHT11_HMD",
