@@ -264,7 +264,7 @@ uint8_t readConfig(void) {
                     } else if (!strcmp(token, "DEBUG")) {
                         debug = atoi(value);
                     } else if (!strcmp(token, "REPORT_CYCLE")) {
-                        report_cycle = atoi(value) * 1000;
+                        report_cycle = atoi(value) * 1000000;
                     } else if (!strcmp(token, "PID_FILE")) {
                         pidfile = strdup(value);
                     } else if (!strcmp(token, "SENSOR")) {
@@ -272,7 +272,7 @@ uint8_t readConfig(void) {
                         sensor_list[num_sensors].pin    = atoi(cursor);
                         char *s_type                    = nextValue(&cursor); // need special handling
                         sensor_list[num_sensors].invert = atoi(nextValue(&cursor));
-                        sensor_list[num_sensors].freq   = atoi(nextValue(&cursor));
+                        sensor_list[num_sensors].freq   = (uint64_t)(atoi(nextValue(&cursor)) * 10000);
                         sensor_list[num_sensors].label  = strdup(nextValue(&cursor));
 
                         // convert type string to enum
@@ -509,7 +509,7 @@ int main(int argc, char *argv[]) {
         }
         force_reading = false;
 //        usleep(next_time-now);
-        usleep((unsigned int) 1000000);
+        usleep((uint64_t)1000000);
     }
     
     /* ------------------------------------------------------------------------------- */
