@@ -493,7 +493,7 @@ int main(int argc, char *argv[]) {
                                sensor_list[index].label,
                                sensor_list[index].invert,
                                &sensor_list[index].value);
-                sensor_list[index].next_read = now + sensor_list[index].freq;
+                sensor_list[index].next_read = now + (sensor_list[index].freq * 10000);
 
                 if (debug) {
                     syslog(LOG_INFO, "Sensor %s next read %llu",
@@ -508,8 +508,8 @@ int main(int argc, char *argv[]) {
             index++;
         }
         force_reading = false;
-//        usleep(next_time-now);
-        usleep((uint64_t)1000000);
+        usleep(next_time-now);
+        //usleep((uint64_t)1000000);
     }
     
     /* ------------------------------------------------------------------------------- */
