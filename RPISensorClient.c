@@ -272,7 +272,7 @@ uint8_t readConfig(void) {
                         sensor_list[num_sensors].pin    = atoi(cursor);
                         char *s_type                    = nextValue(&cursor); // need special handling
                         sensor_list[num_sensors].invert = atoi(nextValue(&cursor));
-                        sensor_list[num_sensors].freq   = (uint64_t)(atoi(nextValue(&cursor)) * 10000);
+                        sensor_list[num_sensors].freq   = (uint64_t)atoi(nextValue(&cursor) * (uint64_t)10000);
                         sensor_list[num_sensors].label  = strdup(nextValue(&cursor));
 
                         // convert type string to enum
@@ -292,7 +292,7 @@ uint8_t readConfig(void) {
                         sensor_list[num_sensors].next_read = (uint64_t)0;
                         
                         if ( debug ) {
-                            syslog(LOG_INFO, "%02d: %s sensor '%s' @ pin %d,%sinverted, read every %d uSecs",
+                            syslog(LOG_INFO, "%02d: %s sensor '%s' @ pin %d,%sinverted, read every %llu uSecs",
                                    num_sensors,
                                    (sensor_list[num_sensors].type == DIGITAL)   ? "Digital"   :
                                    (sensor_list[num_sensors].type == DHT11_TMP) ? "DHT11_TMP" :"DHT11_HMD",
