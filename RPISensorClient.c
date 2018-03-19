@@ -272,7 +272,7 @@ uint8_t readConfig(void) {
                         sensor_list[num_sensors].pin    = atoi(cursor);
                         char *s_type                    = nextValue(&cursor); // need special handling
                         sensor_list[num_sensors].invert = atoi(nextValue(&cursor));
-                        sensor_list[num_sensors].freq   = (uint32_t)atoi(nextValue(&cursor)) * (uint32_t)10000;
+                        sensor_list[num_sensors].freq   = atoi(nextValue(&cursor)) * 10;
                         sensor_list[num_sensors].label  = strdup(nextValue(&cursor));
 
                         // convert type string to enum
