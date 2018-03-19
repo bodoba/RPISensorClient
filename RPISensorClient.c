@@ -469,7 +469,7 @@ int main(int argc, char *argv[]) {
         uint8_t  index     = 0;
         
         if (debug) {
-            syslog(LOG_INFO, "Wake up at %ld", now);
+            syslog(LOG_INFO, "Wake up at %llu", now);
         }
         
         // time to send a full report?
@@ -494,6 +494,13 @@ int main(int argc, char *argv[]) {
                                sensor_list[index].invert,
                                &sensor_list[index].value);
                 sensor_list[index].next_read = now + sensor_list[index].freq;
+
+                if (debug) {
+                    syslog(LOG_INFO, "Sensor %s next read %llu",
+                            sensor_list[index].label,
+                            sensor_list[index].next_read);
+                }
+                
                 if (sensor_list[index].next_read < next_time) {
                     next_time = sensor_list[index].next_read;
                 }
