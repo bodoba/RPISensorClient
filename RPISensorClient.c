@@ -468,6 +468,10 @@ int main(int argc, char *argv[]) {
         uint64_t next_time = last_full_report+report_cycle;
         uint8_t  index     = 0;
         
+        if (debug) {
+            syslog(LOG_INFO, "Wake up at %ld", now);
+        }
+        
         // time to send a full report?
         if ( next_time <= now ) {
             if (debug) {
@@ -497,7 +501,7 @@ int main(int argc, char *argv[]) {
             index++;
         }
         force_reading = false;
-        usleep((next_time-now)*100);
+        usleep(next_time-now);
     }
     
     /* ------------------------------------------------------------------------------- */
