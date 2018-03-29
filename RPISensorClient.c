@@ -497,7 +497,7 @@ int main(int argc, char *argv[]) {
                 if (debug) {
                     syslog(LOG_INFO, "Sensor %s next read in %llu usec",
                             sensor_list[index].label,
-                            sensor_list[index].next_read-now);
+                            sensor_list[index].next-read-now);
                 }
             }
             if (sensor_list[index].next_read < next_time) {
