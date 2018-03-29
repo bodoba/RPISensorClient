@@ -510,7 +510,7 @@ int main(int argc, char *argv[]) {
         force_reading = false;
         syslog(LOG_INFO, "usleep(%lld)", next_time-now);
 //        usleep(next_time-now);
-        usleep(10000);
+        usleep(100000);
 
     
     }
