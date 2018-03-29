@@ -500,19 +500,15 @@ int main(int argc, char *argv[]) {
                             sensor_list[index].label,
                             sensor_list[index].next_read);
                 }
-                
-                if (sensor_list[index].next_read < next_time) {
-                    next_time = sensor_list[index].next_read;
-                }
+            }
+            if (sensor_list[index].next_read < next_time) {
+                next_time = sensor_list[index].next_read;
             }
             index++;
         }
         force_reading = false;
         syslog(LOG_INFO, "usleep(%lld)", next_time-now);
         usleep((next_time-now)*1000);
-//        usleep(1000000);
-
-    
     }
     
     /* ------------------------------------------------------------------------------- */
