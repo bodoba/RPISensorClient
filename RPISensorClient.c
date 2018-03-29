@@ -264,7 +264,7 @@ uint8_t readConfig(void) {
                     } else if (!strcmp(token, "DEBUG")) {
                         debug = atoi(value);
                     } else if (!strcmp(token, "REPORT_CYCLE")) {
-                        report_cycle = atoi(value) * 1000000;
+                        report_cycle = atoi(value) * 10;
                     } else if (!strcmp(token, "PID_FILE")) {
                         pidfile = strdup(value);
                     } else if (!strcmp(token, "SENSOR")) {
