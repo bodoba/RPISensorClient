@@ -468,7 +468,6 @@ int main(int argc, char *argv[]) {
         uint64_t next_time = last_full_report+report_cycle;
         uint8_t  index     = 0;
         
-        if (debug) {
             syslog(LOG_INFO, "Woke up @%llu", now);
         }
         
@@ -496,9 +495,9 @@ int main(int argc, char *argv[]) {
                 sensor_list[index].next_read = now + (sensor_list[index].freq);
 
                 if (debug) {
-                    syslog(LOG_INFO, "Sensor %s next read %llu",
+                    syslog(LOG_INFO, "Sensor %s next read in %llu usec",
                             sensor_list[index].label,
-                            sensor_list[index].next_read);
+                            sensor_list[index].next_read-now);
                 }
             }
             if (sensor_list[index].next_read < next_time) {
@@ -507,7 +506,10 @@ int main(int argc, char *argv[]) {
             index++;
         }
         force_reading = false;
-        syslog(LOG_INFO, "usleep(%lld)", next_time-now);
+
+        if (debug) {
+            syslog(LOG_INFO, "sleep for %lld usec", next_time-now);
+        }
         usleep((next_time-now)*1000);
     }
     
