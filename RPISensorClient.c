@@ -469,7 +469,7 @@ int main(int argc, char *argv[]) {
         uint8_t  index     = 0;
         
         if (debug) {
-            syslog(LOG_INFO, "Wake up at %llu", now);
+            syslog(LOG_INFO, "Woke up @%llu", now);
         }
         
         // time to send a full report?
@@ -508,6 +508,7 @@ int main(int argc, char *argv[]) {
             index++;
         }
         force_reading = false;
+        syslog(LOG_INFO, "usleep(%lld)", next_time-now);
         usleep(next_time-now);
         //usleep((uint64_t)1000000);
     }
