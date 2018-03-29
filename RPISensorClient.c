@@ -468,9 +468,6 @@ int main(int argc, char *argv[]) {
         uint64_t next_time = last_full_report+report_cycle;
         uint8_t  index     = 0;
         
-            syslog(LOG_INFO, "Woke up @%llu", now);
-        }
-        
         // time to send a full report?
         if ( next_time <= now ) {
             if (debug) {
