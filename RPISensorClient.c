@@ -177,7 +177,7 @@ bool get_id ( char* id ) {
  * Read sensor and publish value to MQTT broker
  * ---------------------------------------------------------------------------------------
  */
-void readSensor(char* id, int pin, char* name, bool invert, sensorType_t type, uint8_t* old_value) {
+void readSensor(char* id, int pin, char* name, bool invert, sensorType_t type, uint16_t* old_value) {
     char topic[32], msg[64];
     uint16_t new_value;
     
