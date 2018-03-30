@@ -357,7 +357,7 @@ int main(int argc, char *argv[]) {
         syslog(LOG_INFO, "MQTT interface: %s",           mqtt_interface);
         syslog(LOG_INFO, "MQTT keepalive: %d",           mqtt_keepalive);
         syslog(LOG_INFO, "PREFIX: %s",                   prefix);
-        syslog(LOG_INFO, "Full report every %llu seconds", report_cycle);
+        syslog(LOG_INFO, "Full report every %llu uSec", report_cycle);
         syslog(LOG_INFO, "pid/lock file: %s",            pidfile);
     }
     
@@ -470,8 +470,8 @@ int main(int argc, char *argv[]) {
         
         // time to send a full report?
         if ( next_time <= now ) {
-            if (debug>=2) {
-                syslog(LOG_INFO, "Send full report");
+            if (debug) {
+                syslog(LOG_INFO, "Trigger full sensor report");
             }
             force_reading    = true;
             last_full_report = now;
