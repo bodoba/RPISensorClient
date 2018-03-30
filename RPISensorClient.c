@@ -74,7 +74,7 @@
  */
 int      pidFilehandle    = 0;
 bool     deamon           = true;
-bool     debug            = DEBUG;
+int8_t   debug            = DEBUG;
 char     *prefix          = PREFIX;
 char     *pidfile         = PID_FILE;
 char     *configFile      = CONFIG_FILE;
@@ -193,7 +193,7 @@ void readSensor(char* id, int pin, char* name, bool invert, uint8_t* old_value) 
         sprintf(topic, "%s/%s-%s/%d", name, prefix, id, pin);
         sprintf(msg, "{\"%s\":\"%d\"}", name, new_value);
         if ( debug ) {
-            syslog(LOG_INFO, "%s %s\n", topic, msg);
+            syslog(LOG_INFO, "%s: %d", name, new_value);
         }
         if ( ! mqtt_publish( topic, msg ) ) {
             syslog(LOG_ERR, "Error: Did not publish message: %s\n", msg);
@@ -335,7 +335,7 @@ int main(int argc, char *argv[]) {
     /* FIXME: Use getopt_long and provide some help to the user just in case...        */
     for (int i=0; i<argc; i++) {
         if (!strcmp(argv[i], "-d")) {       /* '-d' turns debug mode on                */
-            debug = true;
+            debug = 1;
         }
         if (!strcmp(argv[i], "-c")) {       /* '-c' specify configuration file         */
             configFile = strdup(argv[++i]);
@@ -390,7 +390,7 @@ int main(int argc, char *argv[]) {
         dup(fd);                            /* STDOUT to /dev/null                     */
         dup(fd);                            /* STDERR to /dev/null                     */
     } else {
-        syslog(LOG_INFO, "Debug mode, not demonizing");
+        syslog(LOG_INFO, "Not demonizing");
     }
     
     /* ------------------------------------------------------------------------------- */
@@ -413,7 +413,7 @@ int main(int argc, char *argv[]) {
             exit(EXIT_FAILURE);
         }
     } else {
-        syslog(LOG_INFO, "Debug mode, not pid/lock File created");
+        syslog(LOG_INFO, "No daemonn, no pid/lock File created");
     }
 
     /* ------------------------------------------------------------------------------- */
@@ -470,7 +470,7 @@ int main(int argc, char *argv[]) {
         
         // time to send a full report?
         if ( next_time <= now ) {
-            if (debug) {
+            if (debug>=2) {
                 syslog(LOG_INFO, "Send full report");
             }
             force_reading    = true;
@@ -491,7 +491,7 @@ int main(int argc, char *argv[]) {
                                &sensor_list[index].value);
                 sensor_list[index].next_read = now + (sensor_list[index].freq);
 
-                if (debug) {
+                if (debug>=2) {
                     syslog(LOG_INFO, "Sensor %s next read in %llu usec",
                             sensor_list[index].label,
                             sensor_list[index].next_read-now);
@@ -504,7 +504,7 @@ int main(int argc, char *argv[]) {
         }
         force_reading = false;
 
-        if (debug) {
+        if (debug>=2) {
             syslog(LOG_INFO, "sleep for %lld usec", next_time-now);
         }
         usleep((next_time-now)*1000);
