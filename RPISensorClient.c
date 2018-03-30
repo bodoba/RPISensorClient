@@ -488,7 +488,7 @@ int main(int argc, char *argv[]) {
                 readSensor(id, sensor_list[index].pin,
                                sensor_list[index].label,
                                sensor_list[index].invert,
-                               &sensor_list[index].value);
+                               &(sensor_list[index].value));
                 sensor_list[index].next_read = now + (sensor_list[index].freq);
 
                 if (debug>=2) {
