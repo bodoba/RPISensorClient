@@ -108,7 +108,7 @@ sensor_t sensor_list[MAX_SENSORS];
  * Function prototypes
  * ---------------------------------------------------------------------------------------
  */
-void readSensor(char* id, int pin, char* name, bool invert, sensorType_t type, uint8_t* value);
+void readSensor(char* id, int pin, char* name, bool invert, sensorType_t type, uint16_t* value);
 bool get_id ( char* id );
 void sigendCB(int sigval);
 void shutdown_daemon(void);
