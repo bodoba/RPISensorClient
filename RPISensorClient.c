@@ -97,7 +97,7 @@ typedef struct {
     uint32_t      freq;
     char          *label;
     bool          invert;
-    uint8_t       value;
+    uint16_t      value;
     uint64_t      next_read;
 } sensor_t;
 
@@ -108,7 +108,7 @@ sensor_t sensor_list[MAX_SENSORS];
  * Function prototypes
  * ---------------------------------------------------------------------------------------
  */
-void readSensor(char* id, int pin, char* name, bool invert, uint8_t* value);
+void readSensor(char* id, int pin, char* name, bool invert, sensorType_t type, uint8_t* value);
 bool get_id ( char* id );
 void sigendCB(int sigval);
 void shutdown_daemon(void);
@@ -177,9 +177,28 @@ bool get_id ( char* id ) {
  * Read sensor and publish value to MQTT broker
  * ---------------------------------------------------------------------------------------
  */
-void readSensor(char* id, int pin, char* name, bool invert, uint8_t* old_value) {
+void readSensor(char* id, int pin, char* name, bool invert, sensorType_t type, uint8_t* old_value) {
     char topic[32], msg[64];
-    uint8_t new_value = digitalRead(pin);
+    uint16_t new_value;
+    
+    switch( type ) {
+        case DIGITAL:
+            new_value = digitalRead(pin);
+            break;
+            
+        case DHT11_TMP:
+            syslog(LOG_ERR, "DHT11_TMP not supported yet");
+            break;
+            
+        case DHT11_HMD:
+            syslog(LOG_ERR, "DHT11_HMD not supported yet");
+            break;
+            
+        default:
+            syslog(LOG_ERR, "Unknown sensor type");
+            break;
+    }
+    
     if ( invert ) {
         if ( new_value != 0 ) {
             new_value = 0;
