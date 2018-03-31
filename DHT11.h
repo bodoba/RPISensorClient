@@ -32,6 +32,6 @@
 
 #define MAX_TIME  85
 
-bool dht11_read_val( uint8_t pin, int *humidity, int *celcius );
+bool dht11_read_val( uint8_t pin, uint16_t *humidity, uint16_t *celcius );
 
 #endif /* DHT11_h */

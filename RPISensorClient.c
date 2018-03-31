@@ -36,6 +36,7 @@
 
 #include <wiringPi.h>
 #include "MQTT.h"
+#include "DHT11.h"
 #include <sys/time.h>
 
 /*
@@ -184,14 +185,20 @@ void readSensor(char* id, int pin, char* name, bool invert, sensorType_t type, u
     switch( type ) {
         case DIGITAL:
             new_value = digitalRead(pin);
+            if ( invert ) {
+                if ( new_value != 0 ) {
+                    new_value = 0;
+                } else {
+                    new_value = 1;
+                }
+            }
             break;
-            
         case DHT11_TMP:
-            syslog(LOG_ERR, "DHT11_TMP not supported yet");
+            dht11_read_val( pin, &new_value, NULL );
             break;
             
         case DHT11_HMD:
-            syslog(LOG_ERR, "DHT11_HMD not supported yet");
+            dht11_read_val( pin, NULL, &new_value );
             break;
             
         default:
@@ -199,13 +206,6 @@ void readSensor(char* id, int pin, char* name, bool invert, sensorType_t type, u
             break;
     }
     
-    if ( invert ) {
-        if ( new_value != 0 ) {
-            new_value = 0;
-        } else {
-            new_value = 1;
-        }
-    }
     if ( *old_value != new_value ) {
         *old_value = new_value;
         
@@ -220,7 +220,6 @@ void readSensor(char* id, int pin, char* name, bool invert, sensorType_t type, u
     }
 }
 
-
 /*
  * ---------------------------------------------------------------------------------------
  * Get surrent time in milliseconds
@@ -232,7 +231,6 @@ uint64_t current_timestamp() {
     uint64_t milliseconds = te.tv_sec*1000LL + te.tv_usec/1000; // calculate milliseconds
     return milliseconds;
 }
-
 
 /* *********************************************************************************** */
 /* read config file                                                                    */
