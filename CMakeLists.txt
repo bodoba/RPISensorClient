@@ -31,7 +31,7 @@ set(CMAKE_INSTALL_PREFIX /)
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib)
 
-add_executable(rpisensorclient RPISensorClient.c MQTT.c)
+add_executable(rpisensorclient RPISensorClient.c MQTT.c DHT11.c)
 
 target_link_libraries(rpisensorclient "${LIB_MQTT}")
 target_link_libraries(rpisensorclient "${LIB_WIRING}")
