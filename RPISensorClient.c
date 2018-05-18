@@ -18,7 +18,6 @@
  * along with RPISensorClient.  If not, see <http://www.gnu.org/licenses/>.
  * ---------------------------------------------------------------------------------------
  */
-
 #include <sys/socket.h>
 #include <sys/ioctl.h>
 #include <sys/types.h>
@@ -33,11 +32,12 @@
 #include <unistd.h>
 #include <syslog.h>
 #include <signal.h>
+#include <sys/time.h>
 
 #include <wiringPi.h>
+
 #include "MQTT.h"
 #include "DHT11.h"
-#include <sys/time.h>
 
 /*
  * ---------------------------------------------------------------------------------------
@@ -48,7 +48,7 @@
 #define MQTT_BROKER_PORT  1883
 #define MQTT_KEEPALIVE    60
 #define PID_FILE          "/var/run/RPISensorClient.pid"
-#define REPORT_CYCLE      300
+#define REPORT_CYCLE      30000
 #define MQTT_INTERFACE    "eth0"
 #define DEBUG             0
 #define PREFIX            "BB"
